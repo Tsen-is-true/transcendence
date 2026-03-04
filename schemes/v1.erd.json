@@ -1,0 +1,1557 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dineug/erd-editor/main/json-schema/schema.json",
+  "version": "3.0.0",
+  "settings": {
+    "width": 4000,
+    "height": 3000,
+    "scrollTop": -376.6167,
+    "scrollLeft": -451.262,
+    "zoomLevel": 0.71,
+    "show": 431,
+    "database": 16,
+    "databaseName": "pong_game",
+    "canvasType": "ERD",
+    "language": 1,
+    "tableNameCase": 4,
+    "columnNameCase": 2,
+    "bracketType": 1,
+    "relationshipDataTypeSync": true,
+    "relationshipOptimization": false,
+    "columnOrder": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "maxWidthComment": -1,
+    "ignoreSaveSettings": 0
+  },
+  "doc": {
+    "tableIds": [
+      "T_users",
+      "T_rooms",
+      "T_room_members",
+      "T_tournaments",
+      "T_tournament_participants",
+      "T_matchs",
+      "T_scores"
+    ],
+    "relationshipIds": [
+      "R01",
+      "R02",
+      "R03",
+      "R04",
+      "R05",
+      "R06",
+      "R07",
+      "R08",
+      "R09",
+      "R10",
+      "R11",
+      "R12",
+      "R13",
+      "R14"
+    ],
+    "indexIds": [],
+    "memoIds": []
+  },
+  "collections": {
+    "tableEntities": {
+      "T_users": {
+        "id": "T_users",
+        "name": "users",
+        "comment": "",
+        "columnIds": [
+          "C_users_userid",
+          "C_users_intraId",
+          "C_users_wins",
+          "C_users_loses",
+          "C_users_profileImg",
+          "C_users_nickname",
+          "C_users_isPlaying"
+        ],
+        "seqColumnIds": [
+          "C_users_userid",
+          "C_users_intraId",
+          "C_users_wins",
+          "C_users_loses",
+          "C_users_profileImg",
+          "C_users_nickname",
+          "C_users_isPlaying"
+        ],
+        "ui": {
+          "x": 50,
+          "y": 50,
+          "zIndex": 2,
+          "widthName": 60,
+          "widthComment": 60,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "T_rooms": {
+        "id": "T_rooms",
+        "name": "rooms",
+        "comment": "",
+        "columnIds": [
+          "C_rooms_roomId",
+          "C_rooms_hostUserId",
+          "C_rooms_title",
+          "C_rooms_status",
+          "C_rooms_isTournaments",
+          "C_rooms_countPlayers",
+          "C_rooms_maxPlayers"
+        ],
+        "seqColumnIds": [
+          "C_rooms_roomId",
+          "C_rooms_hostUserId",
+          "C_rooms_title",
+          "C_rooms_status",
+          "C_rooms_isTournaments",
+          "C_rooms_countPlayers",
+          "C_rooms_maxPlayers"
+        ],
+        "ui": {
+          "x": 550,
+          "y": 50,
+          "zIndex": 2,
+          "widthName": 60,
+          "widthComment": 60,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "T_room_members": {
+        "id": "T_room_members",
+        "name": "room_members",
+        "comment": "",
+        "columnIds": [
+          "C_rm_roomMemberId",
+          "C_rm_roomId",
+          "C_rm_userId",
+          "C_rm_isReady"
+        ],
+        "seqColumnIds": [
+          "C_rm_roomMemberId",
+          "C_rm_roomId",
+          "C_rm_userId",
+          "C_rm_isReady"
+        ],
+        "ui": {
+          "x": 50,
+          "y": 550,
+          "zIndex": 2,
+          "widthName": 85,
+          "widthComment": 60,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "T_tournaments": {
+        "id": "T_tournaments",
+        "name": "tournaments",
+        "comment": "",
+        "columnIds": [
+          "C_tour_tournamentId",
+          "C_tour_roomId",
+          "C_tour_isFinish",
+          "C_tour_winnerId",
+          "C_tour_currentRound"
+        ],
+        "seqColumnIds": [
+          "C_tour_tournamentId",
+          "C_tour_roomId",
+          "C_tour_isFinish",
+          "C_tour_winnerId",
+          "C_tour_currentRound"
+        ],
+        "ui": {
+          "x": 1100,
+          "y": 50,
+          "zIndex": 2,
+          "widthName": 70,
+          "widthComment": 60,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "T_tournament_participants": {
+        "id": "T_tournament_participants",
+        "name": "tournament_participants",
+        "comment": "",
+        "columnIds": [
+          "C_tp_participantId",
+          "C_tp_tournamentId",
+          "C_tp_userId",
+          "C_tp_status"
+        ],
+        "seqColumnIds": [
+          "C_tp_participantId",
+          "C_tp_tournamentId",
+          "C_tp_userId",
+          "C_tp_status"
+        ],
+        "ui": {
+          "x": 1100,
+          "y": 550,
+          "zIndex": 2,
+          "widthName": 131,
+          "widthComment": 60,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "T_matchs": {
+        "id": "T_matchs",
+        "name": "matchs",
+        "comment": "",
+        "columnIds": [
+          "C_match_matchId",
+          "C_match_tournamentId",
+          "C_match_roomId",
+          "C_match_player1Id",
+          "C_match_player2Id",
+          "C_match_winnerId",
+          "C_match_round",
+          "C_match_matchOrder",
+          "C_match_nextMatchId",
+          "C_match_status",
+          "C_match_startAt",
+          "C_match_finishAt"
+        ],
+        "seqColumnIds": [
+          "C_match_matchId",
+          "C_match_tournamentId",
+          "C_match_roomId",
+          "C_match_player1Id",
+          "C_match_player2Id",
+          "C_match_winnerId",
+          "C_match_round",
+          "C_match_matchOrder",
+          "C_match_nextMatchId",
+          "C_match_status",
+          "C_match_startAt",
+          "C_match_finishAt"
+        ],
+        "ui": {
+          "x": 550,
+          "y": 550,
+          "zIndex": 2,
+          "widthName": 60,
+          "widthComment": 60,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "T_scores": {
+        "id": "T_scores",
+        "name": "scores",
+        "comment": "",
+        "columnIds": [
+          "C_score_scoreId",
+          "C_score_matchId",
+          "C_score_player1Score",
+          "C_score_player2Score"
+        ],
+        "seqColumnIds": [
+          "C_score_scoreId",
+          "C_score_matchId",
+          "C_score_player1Score",
+          "C_score_player2Score"
+        ],
+        "ui": {
+          "x": 550,
+          "y": 1050,
+          "zIndex": 2,
+          "widthName": 60,
+          "widthComment": 60,
+          "color": ""
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      }
+    },
+    "tableColumnEntities": {
+      "C_users_userid": {
+        "id": "C_users_userid",
+        "tableId": "T_users",
+        "name": "userid",
+        "comment": "autoincrement",
+        "dataType": "INT",
+        "default": "",
+        "options": 11,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 79,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_users_intraId": {
+        "id": "C_users_intraId",
+        "tableId": "T_users",
+        "name": "intraId",
+        "comment": "",
+        "dataType": "VARCHAR(50)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 75,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_users_wins": {
+        "id": "C_users_wins",
+        "tableId": "T_users",
+        "name": "wins",
+        "comment": "",
+        "dataType": "INT",
+        "default": "0",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_users_loses": {
+        "id": "C_users_loses",
+        "tableId": "T_users",
+        "name": "loses",
+        "comment": "",
+        "dataType": "INT",
+        "default": "0",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_users_profileImg": {
+        "id": "C_users_profileImg",
+        "tableId": "T_users",
+        "name": "profileImg",
+        "comment": "",
+        "dataType": "VARCHAR(255)",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 81,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_users_nickname": {
+        "id": "C_users_nickname",
+        "tableId": "T_users",
+        "name": "nickname",
+        "comment": "",
+        "dataType": "VARCHAR(50)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 75,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_users_isPlaying": {
+        "id": "C_users_isPlaying",
+        "tableId": "T_users",
+        "name": "isPlaying",
+        "comment": "",
+        "dataType": "BOOLEAN",
+        "default": "false",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_rooms_roomId": {
+        "id": "C_rooms_roomId",
+        "tableId": "T_rooms",
+        "name": "roomId",
+        "comment": "autoincrement",
+        "dataType": "INT",
+        "default": "",
+        "options": 11,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 79,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_rooms_hostUserId": {
+        "id": "C_rooms_hostUserId",
+        "tableId": "T_rooms",
+        "name": "hostUserId",
+        "comment": "FK → users",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 2,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_rooms_title": {
+        "id": "C_rooms_title",
+        "tableId": "T_rooms",
+        "name": "title",
+        "comment": "",
+        "dataType": "VARCHAR(100)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 81,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_rooms_status": {
+        "id": "C_rooms_status",
+        "tableId": "T_rooms",
+        "name": "status",
+        "comment": "준비/게임중/종료",
+        "dataType": "VARCHAR(20)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 95,
+          "widthDataType": 75,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_rooms_isTournaments": {
+        "id": "C_rooms_isTournaments",
+        "tableId": "T_rooms",
+        "name": "isTournaments",
+        "comment": "토너먼트/1:1",
+        "dataType": "BOOLEAN",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 79,
+          "widthComment": 70,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_rooms_countPlayers": {
+        "id": "C_rooms_countPlayers",
+        "tableId": "T_rooms",
+        "name": "countPlayers",
+        "comment": "",
+        "dataType": "INT",
+        "default": "0",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 69,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_rooms_maxPlayers": {
+        "id": "C_rooms_maxPlayers",
+        "tableId": "T_rooms",
+        "name": "maxPlayers",
+        "comment": "",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 61,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_rm_roomMemberId": {
+        "id": "C_rm_roomMemberId",
+        "tableId": "T_room_members",
+        "name": "roomMemberId",
+        "comment": "autoincrement",
+        "dataType": "INT",
+        "default": "",
+        "options": 11,
+        "ui": {
+          "keys": 1,
+          "widthName": 86,
+          "widthComment": 79,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_rm_roomId": {
+        "id": "C_rm_roomId",
+        "tableId": "T_room_members",
+        "name": "roomId",
+        "comment": "FK → rooms",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 2,
+          "widthName": 60,
+          "widthComment": 65,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_rm_userId": {
+        "id": "C_rm_userId",
+        "tableId": "T_room_members",
+        "name": "userId",
+        "comment": "FK → users",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 2,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_rm_isReady": {
+        "id": "C_rm_isReady",
+        "tableId": "T_room_members",
+        "name": "isReady",
+        "comment": "",
+        "dataType": "BOOLEAN",
+        "default": "false",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_tour_tournamentId": {
+        "id": "C_tour_tournamentId",
+        "tableId": "T_tournaments",
+        "name": "tournamentId",
+        "comment": "autoincrement",
+        "dataType": "INT",
+        "default": "",
+        "options": 11,
+        "ui": {
+          "keys": 1,
+          "widthName": 75,
+          "widthComment": 79,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_tour_roomId": {
+        "id": "C_tour_roomId",
+        "tableId": "T_tournaments",
+        "name": "roomId",
+        "comment": "FK → rooms",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 2,
+          "widthName": 60,
+          "widthComment": 65,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_tour_isFinish": {
+        "id": "C_tour_isFinish",
+        "tableId": "T_tournaments",
+        "name": "isFinish",
+        "comment": "종료여부",
+        "dataType": "BOOLEAN",
+        "default": "false",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_tour_winnerId": {
+        "id": "C_tour_winnerId",
+        "tableId": "T_tournaments",
+        "name": "winnerId",
+        "comment": "FK → users",
+        "dataType": "INT",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 2,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_tour_currentRound": {
+        "id": "C_tour_currentRound",
+        "tableId": "T_tournaments",
+        "name": "currentRound",
+        "comment": "",
+        "dataType": "INT",
+        "default": "1",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 74,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_tp_participantId": {
+        "id": "C_tp_participantId",
+        "tableId": "T_tournament_participants",
+        "name": "tournamentParticipantId",
+        "comment": "autoincrement",
+        "dataType": "INT",
+        "default": "",
+        "options": 11,
+        "ui": {
+          "keys": 1,
+          "widthName": 131,
+          "widthComment": 79,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_tp_tournamentId": {
+        "id": "C_tp_tournamentId",
+        "tableId": "T_tournament_participants",
+        "name": "tournamentId",
+        "comment": "FK → tournaments",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 2,
+          "widthName": 75,
+          "widthComment": 99,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_tp_userId": {
+        "id": "C_tp_userId",
+        "tableId": "T_tournament_participants",
+        "name": "userId",
+        "comment": "FK → users",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 2,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_tp_status": {
+        "id": "C_tp_status",
+        "tableId": "T_tournament_participants",
+        "name": "status",
+        "comment": "탈락여부",
+        "dataType": "BOOLEAN",
+        "default": "false",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_match_matchId": {
+        "id": "C_match_matchId",
+        "tableId": "T_matchs",
+        "name": "matchId",
+        "comment": "autoincrement",
+        "dataType": "INT",
+        "default": "",
+        "options": 11,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 79,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_match_tournamentId": {
+        "id": "C_match_tournamentId",
+        "tableId": "T_matchs",
+        "name": "tournamentId",
+        "comment": "FK → tournaments",
+        "dataType": "INT",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 2,
+          "widthName": 75,
+          "widthComment": 99,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_match_roomId": {
+        "id": "C_match_roomId",
+        "tableId": "T_matchs",
+        "name": "roomId",
+        "comment": "FK → rooms",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 2,
+          "widthName": 60,
+          "widthComment": 65,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_match_player1Id": {
+        "id": "C_match_player1Id",
+        "tableId": "T_matchs",
+        "name": "player1Id",
+        "comment": "FK → users",
+        "dataType": "INT",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 2,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_match_player2Id": {
+        "id": "C_match_player2Id",
+        "tableId": "T_matchs",
+        "name": "player2Id",
+        "comment": "FK → users",
+        "dataType": "INT",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 2,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_match_winnerId": {
+        "id": "C_match_winnerId",
+        "tableId": "T_matchs",
+        "name": "winnerId",
+        "comment": "FK → users",
+        "dataType": "INT",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 2,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_match_round": {
+        "id": "C_match_round",
+        "tableId": "T_matchs",
+        "name": "round",
+        "comment": "몇라운드인지",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 74,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_match_matchOrder": {
+        "id": "C_match_matchOrder",
+        "tableId": "T_matchs",
+        "name": "matchOrder",
+        "comment": "해당 라운드 경기 순서",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 66,
+          "widthComment": 120,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_match_nextMatchId": {
+        "id": "C_match_nextMatchId",
+        "tableId": "T_matchs",
+        "name": "nextMatchId",
+        "comment": "다음 경기 ID",
+        "dataType": "INT",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 2,
+          "widthName": 68,
+          "widthComment": 68,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_match_status": {
+        "id": "C_match_status",
+        "tableId": "T_matchs",
+        "name": "status",
+        "comment": "대기/게임중/종료/부전승",
+        "dataType": "VARCHAR(20)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 136,
+          "widthDataType": 75,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_match_startAt": {
+        "id": "C_match_startAt",
+        "tableId": "T_matchs",
+        "name": "startAt",
+        "comment": "",
+        "dataType": "TIMESTAMP",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 65,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_match_finishAt": {
+        "id": "C_match_finishAt",
+        "tableId": "T_matchs",
+        "name": "finishAt",
+        "comment": "",
+        "dataType": "TIMESTAMP",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 60,
+          "widthDataType": 65,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_score_scoreId": {
+        "id": "C_score_scoreId",
+        "tableId": "T_scores",
+        "name": "scoreId",
+        "comment": "autoincrement",
+        "dataType": "INT",
+        "default": "",
+        "options": 11,
+        "ui": {
+          "keys": 1,
+          "widthName": 60,
+          "widthComment": 79,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_score_matchId": {
+        "id": "C_score_matchId",
+        "tableId": "T_scores",
+        "name": "matchId",
+        "comment": "FK → matchs",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 2,
+          "widthName": 60,
+          "widthComment": 70,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_score_player1Score": {
+        "id": "C_score_player1Score",
+        "tableId": "T_scores",
+        "name": "player1Score",
+        "comment": "",
+        "dataType": "INT",
+        "default": "0",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 70,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_score_player2Score": {
+        "id": "C_score_player2Score",
+        "tableId": "T_scores",
+        "name": "player2Score",
+        "comment": "",
+        "dataType": "INT",
+        "default": "0",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 70,
+          "widthComment": 60,
+          "widthDataType": 60,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      }
+    },
+    "relationshipEntities": {
+      "R01": {
+        "id": "R01",
+        "identification": false,
+        "relationshipType": 16,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 455,
+          "y": 106,
+          "direction": 2
+        },
+        "end": {
+          "tableId": "T_rooms",
+          "columnIds": [
+            "C_rooms_hostUserId"
+          ],
+          "x": 550,
+          "y": 162,
+          "direction": 1
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "R02": {
+        "id": "R02",
+        "identification": false,
+        "relationshipType": 16,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "T_rooms",
+          "columnIds": [
+            "C_rooms_roomId"
+          ],
+          "x": 660,
+          "y": 274,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_room_members",
+          "columnIds": [
+            "C_rm_roomId"
+          ],
+          "x": 460,
+          "y": 626,
+          "direction": 2
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "R03": {
+        "id": "R03",
+        "identification": false,
+        "relationshipType": 16,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 252.5,
+          "y": 274,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_room_members",
+          "columnIds": [
+            "C_rm_userId"
+          ],
+          "x": 255,
+          "y": 550,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "R04": {
+        "id": "R04",
+        "identification": false,
+        "relationshipType": 16,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "T_rooms",
+          "columnIds": [
+            "C_rooms_roomId"
+          ],
+          "x": 990,
+          "y": 162,
+          "direction": 2
+        },
+        "end": {
+          "tableId": "T_tournaments",
+          "columnIds": [
+            "C_tour_roomId"
+          ],
+          "x": 1100,
+          "y": 138,
+          "direction": 1
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "R05": {
+        "id": "R05",
+        "identification": false,
+        "relationshipType": 4,
+        "startRelationshipType": 1,
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 455,
+          "y": 68.66666666666667,
+          "direction": 2
+        },
+        "end": {
+          "tableId": "T_tournaments",
+          "columnIds": [
+            "C_tour_winnerId"
+          ],
+          "x": 1100,
+          "y": 79.33333333333333,
+          "direction": 1
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "R06": {
+        "id": "R06",
+        "identification": false,
+        "relationshipType": 16,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "T_tournaments",
+          "columnIds": [
+            "C_tour_tournamentId"
+          ],
+          "x": 1299.5,
+          "y": 226,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_tournament_participants",
+          "columnIds": [
+            "C_tp_tournamentId"
+          ],
+          "x": 1337.5,
+          "y": 550,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "R07": {
+        "id": "R07",
+        "identification": false,
+        "relationshipType": 16,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 455,
+          "y": 255.33333333333337,
+          "direction": 2
+        },
+        "end": {
+          "tableId": "T_tournament_participants",
+          "columnIds": [
+            "C_tp_userId"
+          ],
+          "x": 1100,
+          "y": 626,
+          "direction": 1
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "R08": {
+        "id": "R08",
+        "identification": false,
+        "relationshipType": 16,
+        "startRelationshipType": 1,
+        "start": {
+          "tableId": "T_tournaments",
+          "columnIds": [
+            "C_tour_tournamentId"
+          ],
+          "x": 1100,
+          "y": 196.66666666666666,
+          "direction": 1
+        },
+        "end": {
+          "tableId": "T_matchs",
+          "columnIds": [
+            "C_match_tournamentId"
+          ],
+          "x": 981.75,
+          "y": 550,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "R09": {
+        "id": "R09",
+        "identification": false,
+        "relationshipType": 16,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "T_rooms",
+          "columnIds": [
+            "C_rooms_roomId"
+          ],
+          "x": 880,
+          "y": 274,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_matchs",
+          "columnIds": [
+            "C_match_roomId"
+          ],
+          "x": 824.75,
+          "y": 550,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "R10": {
+        "id": "R10",
+        "identification": false,
+        "relationshipType": 4,
+        "startRelationshipType": 1,
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 455,
+          "y": 143.33333333333334,
+          "direction": 2
+        },
+        "end": {
+          "tableId": "T_matchs",
+          "columnIds": [
+            "C_match_player1Id"
+          ],
+          "x": 589.25,
+          "y": 550,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "R11": {
+        "id": "R11",
+        "identification": false,
+        "relationshipType": 4,
+        "startRelationshipType": 1,
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 455,
+          "y": 180.66666666666669,
+          "direction": 2
+        },
+        "end": {
+          "tableId": "T_matchs",
+          "columnIds": [
+            "C_match_player2Id"
+          ],
+          "x": 667.75,
+          "y": 550,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "R12": {
+        "id": "R12",
+        "identification": false,
+        "relationshipType": 4,
+        "startRelationshipType": 1,
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 455,
+          "y": 218.00000000000003,
+          "direction": 2
+        },
+        "end": {
+          "tableId": "T_matchs",
+          "columnIds": [
+            "C_match_winnerId"
+          ],
+          "x": 746.25,
+          "y": 550,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "R13": {
+        "id": "R13",
+        "identification": false,
+        "relationshipType": 4,
+        "startRelationshipType": 1,
+        "start": {
+          "tableId": "T_matchs",
+          "columnIds": [
+            "C_match_matchId"
+          ],
+          "x": 903.25,
+          "y": 550,
+          "direction": 4
+        },
+        "end": {
+          "tableId": "T_matchs",
+          "columnIds": [
+            "C_match_nextMatchId"
+          ],
+          "x": 1021,
+          "y": 570,
+          "direction": 2
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "R14": {
+        "id": "R14",
+        "identification": false,
+        "relationshipType": 16,
+        "startRelationshipType": 2,
+        "start": {
+          "tableId": "T_matchs",
+          "columnIds": [
+            "C_match_matchId"
+          ],
+          "x": 785.5,
+          "y": 894,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_scores",
+          "columnIds": [
+            "C_score_matchId"
+          ],
+          "x": 747,
+          "y": 1050,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      }
+    },
+    "indexEntities": {},
+    "indexColumnEntities": {},
+    "memoEntities": {}
+  }
+}
