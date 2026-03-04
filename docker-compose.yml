@@ -1,0 +1,33 @@
+services:
+  db:
+    image: mariadb:11
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  backend:
+    build: ./apps/backend
+    env_file:
+      - .env
+    depends_on:
+      - db
+    ports:
+      - "3001:3001"
+
+  frontend:
+    build: ./apps/frontend
+    env_file:
+      - .env
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+
+volumes:
+  db_data:
