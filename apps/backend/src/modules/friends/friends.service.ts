@@ -1,5 +1,7 @@
 import {
   Injectable,
+  Inject,
+  forwardRef,
   NotFoundException,
   ConflictException,
   BadRequestException,
@@ -15,6 +17,7 @@ export class FriendsService {
   constructor(
     @InjectRepository(Friend)
     private readonly friendRepo: Repository<Friend>,
+    @Inject(forwardRef(() => UsersService))
     private readonly usersService: UsersService,
   ) {}
 
