@@ -7,9 +7,11 @@ import {
   MessageBody,
   ConnectedSocket,
 } from '@nestjs/websockets';
+import { Inject, forwardRef } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from '@common/interfaces/jwt-payload.interface';
+import { RoomsService } from '../rooms.service';
 
 @WebSocketGateway({ namespace: '/lobby', cors: true })
 export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -18,7 +20,11 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   private socketUser = new Map<string, number>();
 
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    @Inject(forwardRef(() => RoomsService))
+    private readonly roomsService: RoomsService,
+  ) {}
 
   async handleConnection(client: Socket) {
     try {
@@ -57,6 +63,26 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() data: { roomId: number },
   ) {
     client.leave(`room:${data.roomId}`);
+  }
+
+  @SubscribeMessage('room:ready')
+  async handleReady(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: { roomId: number; isReady: boolean },
+  ) {
+    const userId = this.getUserIdFromSocket(client);
+    if (!userId) return;
+    await this.roomsService.toggleReady(data.roomId, userId, data.isReady);
+  }
+
+  @SubscribeMessage('room:kick')
+  async handleKick(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: { roomId: number; userId: number },
+  ) {
+    const hostUserId = this.getUserIdFromSocket(client);
+    if (!hostUserId) return;
+    await this.roomsService.kickMember(data.roomId, hostUserId, data.userId);
   }
 
   emitRoomCreated(room: any) {
