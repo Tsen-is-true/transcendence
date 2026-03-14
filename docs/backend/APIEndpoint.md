@@ -53,10 +53,10 @@
 
 | 상태 | Method | Path | 설명 | 인증 |
 |------|--------|------|------|------|
-| [ ] | GET | `/users/:id/stats` | 유저 통계 조회 | JWT |
-| [ ] | GET | `/users/:id/matches` | 매치 히스토리 (페이지네이션) | JWT |
-| [ ] | GET | `/users/:id/achievements` | 유저 업적 목록 | JWT |
-| [ ] | GET | `/leaderboard` | 리더보드 (ELO/승수/레벨) | JWT |
+| [x] | GET | `/users/:id/stats` | 유저 통계 조회 | JWT |
+| [x] | GET | `/users/:id/matches` | 매치 히스토리 (페이지네이션) | JWT |
+| [x] | GET | `/users/:id/achievements` | 유저 업적 목록 | JWT |
+| [x] | GET | `/leaderboard` | 리더보드 (ELO/승수/레벨) | JWT |
 
 ### Epic 08: Public API
 
