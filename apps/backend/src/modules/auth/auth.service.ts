@@ -3,13 +3,20 @@ import {
   ConflictException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '@modules/users/users.service';
+import { User } from '@modules/users/entities/user.entity';
 import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
 
   async register(dto: RegisterDto) {
     const existingEmail = await this.usersService.findByEmail(dto.email);
@@ -57,5 +64,77 @@ export class AuthService {
     }
 
     return user;
+  }
+
+  async login(user: User) {
+    const payload = {
+      sub: user.userid,
+      email: user.email,
+      nickname: user.nickname,
+    };
+
+    const accessToken = this.jwtService.sign(payload);
+    const refreshToken = this.jwtService.sign(payload, {
+      expiresIn: this.configService.get<string>('jwt.refreshExpiration'),
+    });
+
+    const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    await this.usersService.update(user.userid, { hashedRefreshToken });
+
+    return {
+      accessToken,
+      refreshToken,
+      user: {
+        userid: user.userid,
+        email: user.email,
+        nickname: user.nickname,
+        avatarUrl: user.avatarUrl,
+      },
+    };
+  }
+
+  async refreshTokens(refreshToken: string) {
+    let payload: any;
+    try {
+      payload = this.jwtService.verify(refreshToken);
+    } catch {
+      throw new UnauthorizedException('유효하지 않은 리프레시 토큰입니다');
+    }
+
+    const user = await this.usersService.findById(payload.sub);
+    if (!user || !user.hashedRefreshToken) {
+      throw new UnauthorizedException('유효하지 않은 리프레시 토큰입니다');
+    }
+
+    const isTokenValid = await bcrypt.compare(
+      refreshToken,
+      user.hashedRefreshToken,
+    );
+    if (!isTokenValid) {
+      throw new UnauthorizedException('유효하지 않은 리프레시 토큰입니다');
+    }
+
+    const newPayload = {
+      sub: user.userid,
+      email: user.email,
+      nickname: user.nickname,
+    };
+
+    const newAccessToken = this.jwtService.sign(newPayload);
+    const newRefreshToken = this.jwtService.sign(newPayload, {
+      expiresIn: this.configService.get<string>('jwt.refreshExpiration'),
+    });
+
+    const hashedRefreshToken = await bcrypt.hash(newRefreshToken, 10);
+    await this.usersService.update(user.userid, { hashedRefreshToken });
+
+    return {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+    };
+  }
+
+  async logout(userId: number) {
+    await this.usersService.update(userId, { hashedRefreshToken: null });
   }
 }

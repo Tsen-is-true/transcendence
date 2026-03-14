@@ -53,6 +53,9 @@ export class User {
   @Column({ type: 'varchar', length: 100, nullable: true })
   oauthId!: string | null;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  hashedRefreshToken!: string | null;
+
   @Column({ type: 'boolean', default: false })
   isPlaying!: boolean;
 

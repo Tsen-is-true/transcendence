@@ -8,10 +8,13 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
+import { CurrentUser } from '@common/decorators/current-user.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -30,7 +33,23 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @ApiOperation({ summary: '로그인' })
   async login(@Body() _dto: LoginDto, @Request() req: any) {
-    const { userid, email, nickname, avatarUrl } = req.user;
-    return { userid, email, nickname, avatarUrl };
+    return this.authService.login(req.user);
+  }
+
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Access Token 갱신' })
+  async refresh(@Body() dto: RefreshTokenDto) {
+    return this.authService.refreshTokens(dto.refreshToken);
+  }
+
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: '로그아웃 (Refresh Token 무효화)' })
+  async logout(@CurrentUser('sub') userId: number) {
+    await this.authService.logout(userId);
+    return { message: '로그아웃되었습니다' };
   }
 }
