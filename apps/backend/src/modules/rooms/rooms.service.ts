@@ -1,5 +1,7 @@
 import {
   Injectable,
+  Inject,
+  forwardRef,
   NotFoundException,
   ForbiddenException,
   BadRequestException,
@@ -10,6 +12,7 @@ import { Repository, DataSource, FindOptionsWhere } from 'typeorm';
 import { Room, RoomStatus } from './entities/room.entity';
 import { RoomMember } from './entities/room-member.entity';
 import { UsersService } from '@modules/users/users.service';
+import { LobbyGateway } from './gateways/lobby.gateway';
 import { CreateRoomDto } from './dto/create-room.dto';
 
 @Injectable()
@@ -21,6 +24,8 @@ export class RoomsService {
     private readonly memberRepo: Repository<RoomMember>,
     private readonly usersService: UsersService,
     private readonly dataSource: DataSource,
+    @Inject(forwardRef(() => LobbyGateway))
+    private readonly lobbyGateway: LobbyGateway,
   ) {}
 
   async create(dto: CreateRoomDto, userId: number) {
@@ -41,7 +46,9 @@ export class RoomsService {
     });
     await this.memberRepo.save(member);
 
-    return this.findOne(savedRoom.roomId);
+    const result = await this.findOne(savedRoom.roomId);
+    this.lobbyGateway.emitRoomCreated(result);
+    return result;
   }
 
   async findAll(
@@ -132,6 +139,7 @@ export class RoomsService {
 
     await this.memberRepo.delete({ roomId });
     await this.roomRepo.remove(room);
+    this.lobbyGateway.emitRoomDeleted(roomId);
   }
 
   async join(roomId: number, userId: number) {
@@ -172,6 +180,10 @@ export class RoomsService {
       room.countPlayers += 1;
       await roomRepo.save(room);
 
+      const user = await this.usersService.getPublicProfile(userId);
+      this.lobbyGateway.emitMemberJoined(roomId, user);
+      this.lobbyGateway.emitRoomUpdated(room);
+
       return { roomId, userId, message: '방에 참가했습니다' };
     });
   }
@@ -200,8 +212,11 @@ export class RoomsService {
       await memberRepo.remove(member);
       room.countPlayers -= 1;
 
+      this.lobbyGateway.emitMemberLeft(roomId, userId);
+
       if (room.countPlayers <= 0) {
         await roomRepo.remove(room);
+        this.lobbyGateway.emitRoomDeleted(roomId);
         return { roomId, userId, roomDeleted: true };
       }
 
@@ -216,6 +231,7 @@ export class RoomsService {
       }
 
       await roomRepo.save(room);
+      this.lobbyGateway.emitRoomUpdated(room);
       return { roomId, userId, roomDeleted: false, newHostUserId: room.hostUserId };
     });
   }
