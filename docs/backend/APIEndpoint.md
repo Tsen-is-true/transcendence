@@ -108,16 +108,16 @@
 
 | 상태 | 방향 | 이벤트 | 설명 |
 |------|------|--------|------|
-| [ ] | S→C | `game:state` | 게임 상태 동기화 (30fps) |
-| [ ] | S→C | `game:countdown` | 시작 카운트다운 |
-| [ ] | S→C | `game:start` | 게임 시작 |
-| [ ] | S→C | `game:score` | 득점 이벤트 |
-| [ ] | S→C | `game:pause` | 일시정지 (재접속 대기) |
-| [ ] | S→C | `game:resume` | 게임 재개 |
-| [ ] | S→C | `game:end` | 게임 종료 |
-| [ ] | C→S | `game:join` | 게임 소켓 접속 |
-| [ ] | C→S | `game:paddle` | 패들 입력 |
-| [ ] | C→S | `game:ping` | 레이턴시 측정 |
+| [x] | S→C | `game:state` | 게임 상태 동기화 (30fps) |
+| [x] | S→C | `game:countdown` | 시작 카운트다운 |
+| [x] | S→C | `game:start` | 게임 시작 |
+| [x] | S→C | `game:score` | 득점 이벤트 |
+| [x] | S→C | `game:pause` | 일시정지 (재접속 대기) |
+| [x] | S→C | `game:resume` | 게임 재개 |
+| [x] | S→C | `game:end` | 게임 종료 |
+| [x] | C→S | `game:join` | 게임 소켓 접속 |
+| [x] | C→S | `game:paddle` | 패들 입력 |
+| [x] | C→S | `game:ping` | 레이턴시 측정 |
 
 ### Tournament Events (Epic 06)
 
