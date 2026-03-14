@@ -47,7 +47,7 @@
 
 | 상태 | Method | Path | 설명 | 인증 |
 |------|--------|------|------|------|
-| [ ] | GET | `/tournaments/:tournamentId` | 토너먼트 상세 (대진표 포함) | JWT |
+| [x] | GET | `/tournaments/:tournamentId` | 토너먼트 상세 (대진표 포함) | JWT |
 
 ### Epic 07: Stats / Achievements
 
@@ -123,10 +123,10 @@
 
 | 상태 | 방향 | 이벤트 | 설명 |
 |------|------|--------|------|
-| [ ] | S→C | `tournament:update` | 토너먼트 상태/대진표 변경 |
-| [ ] | S→C | `tournament:match:start` | 다음 매치 시작 |
-| [ ] | S→C | `tournament:match:end` | 매치 종료 |
-| [ ] | S→C | `tournament:end` | 토너먼트 종료 |
+| [x] | S→C | `tournament:update` | 토너먼트 상태/대진표 변경 |
+| [x] | S→C | `tournament:match:start` | 다음 매치 시작 |
+| [x] | S→C | `tournament:match:end` | 매치 종료 |
+| [x] | S→C | `tournament:end` | 토너먼트 종료 |
 
 ### Namespace: `/chat` (Epic 10)
 
