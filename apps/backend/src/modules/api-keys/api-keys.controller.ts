@@ -9,7 +9,7 @@ import {
   ParseIntPipe,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@common/guards/jwt-auth.guard';
 import { CurrentUser } from '@common/decorators/current-user.decorator';
 import { ApiKeysService } from './api-keys.service';
@@ -25,6 +25,7 @@ export class ApiKeysController {
 
   @Post()
   @ApiOperation({ summary: 'API Key 생성' })
+  @ApiResponse({ status: 201, description: 'API Key 생성 성공 (원본 키 1회 반환)' })
   async create(
     @CurrentUser('sub') userId: number,
     @Body() dto: CreateApiKeyDto,
