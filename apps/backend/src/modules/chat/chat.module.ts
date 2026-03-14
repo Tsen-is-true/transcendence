@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Message } from './entities/message.entity';
 import { ChatService } from './chat.service';
 import { ChatController } from './chat.controller';
+import { ChatGateway } from './gateways/chat.gateway';
 import { UsersModule } from '@modules/users/users.module';
 import { FriendsModule } from '@modules/friends/friends.module';
 import { AuthModule } from '@modules/auth/auth.module';
@@ -15,7 +16,7 @@ import { AuthModule } from '@modules/auth/auth.module';
     forwardRef(() => AuthModule),
   ],
   controllers: [ChatController],
-  providers: [ChatService],
+  providers: [ChatService, ChatGateway],
   exports: [ChatService],
 })
 export class ChatModule {}
