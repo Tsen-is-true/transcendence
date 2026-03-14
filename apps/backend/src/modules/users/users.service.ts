@@ -69,6 +69,34 @@ export class UsersService {
     return user;
   }
 
+  async getUserStats(userid: number) {
+    const user = await this.userRepo.findOne({ where: { userid } });
+    if (!user) return null;
+
+    const totalGames = user.wins + user.loses;
+    const winRate =
+      totalGames > 0
+        ? Math.round((user.wins / totalGames) * 1000) / 10
+        : 0;
+    const xpToNextLevel = user.level * 100 - user.xp;
+
+    return {
+      userId: user.userid,
+      nickname: user.nickname,
+      avatarUrl: user.avatarUrl,
+      wins: user.wins,
+      loses: user.loses,
+      totalGames,
+      winRate,
+      elo: user.elo,
+      level: user.level,
+      xp: user.xp,
+      xpToNextLevel,
+      streak: user.streak,
+      maxStreak: user.maxStreak,
+    };
+  }
+
   async search(query: string, page: number, limit: number) {
     const [users, total] = await this.userRepo.findAndCount({
       where: query ? { nickname: Like(`%${query}%`) } : {},

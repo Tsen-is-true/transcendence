@@ -103,6 +103,16 @@ export class UsersController {
     return { avatarUrl };
   }
 
+  @Get(':id/stats')
+  @ApiOperation({ summary: '유저 통계 조회' })
+  async getUserStats(@Param('id', ParseIntPipe) id: number) {
+    const stats = await this.usersService.getUserStats(id);
+    if (!stats) {
+      throw new NotFoundException('유저를 찾을 수 없습니다');
+    }
+    return stats;
+  }
+
   @Get(':id')
   @ApiOperation({ summary: '유저 프로필 조회' })
   async getUserProfile(@Param('id', ParseIntPipe) id: number) {
