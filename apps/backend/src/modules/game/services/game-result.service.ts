@@ -24,10 +24,26 @@ export class GameResultService {
     matchId: number,
   ) => void;
 
+  private onTournamentEventCallback?: (
+    type: 'match:end' | 'match:start' | 'update' | 'end',
+    roomId: number,
+    data: any,
+  ) => void;
+
   setOnFinalReadyCallback(
     callback: (roomId: number, matchId: number) => void,
   ) {
     this.onFinalReadyCallback = callback;
+  }
+
+  setOnTournamentEventCallback(
+    callback: (
+      type: 'match:end' | 'match:start' | 'update' | 'end',
+      roomId: number,
+      data: any,
+    ) => void,
+  ) {
+    this.onTournamentEventCallback = callback;
   }
 
   constructor(
@@ -83,6 +99,16 @@ export class GameResultService {
       // 8. Process room/tournament
       await this.processRoomAfterGame(manager, game);
     });
+  }
+
+  private emitTournamentEvent(
+    type: 'match:end' | 'match:start' | 'update' | 'end',
+    roomId: number,
+    data: any,
+  ) {
+    if (this.onTournamentEventCallback) {
+      this.onTournamentEventCallback(type, roomId, data);
+    }
   }
 
   private async updatePlayerStats(
@@ -156,6 +182,14 @@ export class GameResultService {
       { status: ParticipantStatus.ELIMINATED },
     );
 
+    // Emit tournament:match:end
+    this.emitTournamentEvent('match:end', game.roomId, {
+      matchId: match.matchId,
+      winnerId: match.winnerId,
+      round: match.round,
+      matchOrder: match.matchOrder,
+    });
+
     if (match.round === 1 && match.nextMatchId) {
       // Assign winner to next match (final)
       const nextMatch = await matchRepo.findOne({
@@ -169,13 +203,26 @@ export class GameResultService {
         }
         await matchRepo.save(nextMatch);
 
+        // Emit tournament:update after winner assignment
+        this.emitTournamentEvent('update', game.roomId, {
+          tournamentId: match.tournamentId,
+        });
+
         // Both players assigned → schedule final match after 10s
         if (nextMatch.player1Id && nextMatch.player2Id) {
           await tournamentRepo.update(match.tournamentId, {
             currentRound: 2,
           });
 
-          // Store matchId for delayed start via callback
+          // Emit tournament:match:start for final
+          this.emitTournamentEvent('match:start', game.roomId, {
+            matchId: nextMatch.matchId,
+            player1Id: nextMatch.player1Id,
+            player2Id: nextMatch.player2Id,
+            round: 2,
+          });
+
+          // Schedule final match start via callback
           if (this.onFinalReadyCallback) {
             this.onFinalReadyCallback(
               game.roomId,
@@ -197,6 +244,12 @@ export class GameResultService {
       await manager
         .getRepository(Room)
         .update({ roomId: game.roomId }, { status: RoomStatus.FINISHED });
+
+      // Emit tournament:end
+      this.emitTournamentEvent('end', game.roomId, {
+        tournamentId: match.tournamentId,
+        winnerId: match.winnerId,
+      });
     }
   }
 }

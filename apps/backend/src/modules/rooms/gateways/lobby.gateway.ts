@@ -113,6 +113,22 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.server.to(`room:${roomId}`).emit('room:game:starting', { roomId, matchId });
   }
 
+  emitTournamentUpdate(roomId: number, data: any) {
+    this.server.to(`room:${roomId}`).emit('tournament:update', data);
+  }
+
+  emitTournamentMatchStart(roomId: number, data: any) {
+    this.server.to(`room:${roomId}`).emit('tournament:match:start', data);
+  }
+
+  emitTournamentMatchEnd(roomId: number, data: any) {
+    this.server.to(`room:${roomId}`).emit('tournament:match:end', data);
+  }
+
+  emitTournamentEnd(roomId: number, data: any) {
+    this.server.to(`room:${roomId}`).emit('tournament:end', data);
+  }
+
   getUserIdFromSocket(client: Socket): number | undefined {
     return this.socketUser.get(client.id);
   }

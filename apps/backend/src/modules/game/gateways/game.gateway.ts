@@ -8,7 +8,7 @@ import {
   MessageBody,
   ConnectedSocket,
 } from '@nestjs/websockets';
-import { Logger } from '@nestjs/common';
+import { Logger, Inject, forwardRef } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -18,6 +18,7 @@ import { Match, MatchStatus } from '../entities/match.entity';
 import { PongEngineService } from '../services/pong-engine.service';
 import { GameResultService } from '../services/game-result.service';
 import { UsersService } from '@modules/users/users.service';
+import { LobbyGateway } from '@modules/rooms/gateways/lobby.gateway';
 import { GAME_CONFIG } from '../constants/game.constants';
 
 @WebSocketGateway({ namespace: '/game', cors: true })
@@ -37,6 +38,8 @@ export class GameGateway
     private readonly pongEngine: PongEngineService,
     private readonly gameResultService: GameResultService,
     private readonly usersService: UsersService,
+    @Inject(forwardRef(() => LobbyGateway))
+    private readonly lobbyGateway: LobbyGateway,
     @InjectRepository(Match)
     private readonly matchRepo: Repository<Match>,
   ) {}
@@ -45,10 +48,27 @@ export class GameGateway
     this.gameResultService.setOnFinalReadyCallback(
       (roomId, matchId) => {
         setTimeout(() => {
-          this.server
-            .to(`room:${roomId}`)
-            .emit('room:game:starting', { roomId, matchId });
+          this.lobbyGateway.emitGameStarting(roomId, matchId);
         }, 10000);
+      },
+    );
+
+    this.gameResultService.setOnTournamentEventCallback(
+      (type, roomId, data) => {
+        switch (type) {
+          case 'match:end':
+            this.lobbyGateway.emitTournamentMatchEnd(roomId, data);
+            break;
+          case 'match:start':
+            this.lobbyGateway.emitTournamentMatchStart(roomId, data);
+            break;
+          case 'update':
+            this.lobbyGateway.emitTournamentUpdate(roomId, data);
+            break;
+          case 'end':
+            this.lobbyGateway.emitTournamentEnd(roomId, data);
+            break;
+        }
       },
     );
 
