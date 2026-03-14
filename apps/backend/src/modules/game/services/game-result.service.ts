@@ -19,6 +19,17 @@ const XP_LOSS = 10;
 
 @Injectable()
 export class GameResultService {
+  private onFinalReadyCallback?: (
+    roomId: number,
+    matchId: number,
+  ) => void;
+
+  setOnFinalReadyCallback(
+    callback: (roomId: number, matchId: number) => void,
+  ) {
+    this.onFinalReadyCallback = callback;
+  }
+
   constructor(
     @InjectRepository(Match)
     private readonly matchRepo: Repository<Match>,
@@ -145,31 +156,33 @@ export class GameResultService {
       { status: ParticipantStatus.ELIMINATED },
     );
 
-    if (match.round === 1) {
-      // Check if both semi-finals are done
-      const semiMatches = await matchRepo.find({
-        where: { tournamentId: match.tournamentId, round: 1 },
+    if (match.round === 1 && match.nextMatchId) {
+      // Assign winner to next match (final)
+      const nextMatch = await matchRepo.findOne({
+        where: { matchId: match.nextMatchId },
       });
+      if (nextMatch) {
+        if (!nextMatch.player1Id) {
+          nextMatch.player1Id = match.winnerId;
+        } else {
+          nextMatch.player2Id = match.winnerId;
+        }
+        await matchRepo.save(nextMatch);
 
-      const allDone = semiMatches.every(
-        (m: Match) =>
-          m.status === MatchStatus.FINISHED ||
-          m.status === MatchStatus.WALKOVER,
-      );
+        // Both players assigned → schedule final match after 10s
+        if (nextMatch.player1Id && nextMatch.player2Id) {
+          await tournamentRepo.update(match.tournamentId, {
+            currentRound: 2,
+          });
 
-      if (allDone) {
-        // Create final match
-        const winners = semiMatches.map((m: Match) => m.winnerId!);
-        await matchRepo.save({
-          tournamentId: match.tournamentId,
-          roomId: game.roomId,
-          player1Id: winners[0],
-          player2Id: winners[1],
-          round: 2,
-          matchOrder: 1,
-          status: MatchStatus.WAITING,
-        });
-        await tournamentRepo.update(match.tournamentId, { currentRound: 2 });
+          // Store matchId for delayed start via callback
+          if (this.onFinalReadyCallback) {
+            this.onFinalReadyCallback(
+              game.roomId,
+              nextMatch.matchId,
+            );
+          }
+        }
       }
     } else if (match.round === 2) {
       // Final match done

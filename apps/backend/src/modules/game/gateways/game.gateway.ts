@@ -42,6 +42,16 @@ export class GameGateway
   ) {}
 
   afterInit() {
+    this.gameResultService.setOnFinalReadyCallback(
+      (roomId, matchId) => {
+        setTimeout(() => {
+          this.server
+            .to(`room:${roomId}`)
+            .emit('room:game:starting', { roomId, matchId });
+        }, 10000);
+      },
+    );
+
     this.pongEngine.setCallbacks({
       onScore: (matchId, event) => {
         this.server
