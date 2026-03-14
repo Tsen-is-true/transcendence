@@ -36,12 +36,12 @@
 
 | 상태 | Method | Path | 설명 | 인증 |
 |------|--------|------|------|------|
-| [ ] | POST | `/rooms` | 방 생성 | JWT |
-| [ ] | GET | `/rooms` | 방 목록 조회 | JWT |
-| [ ] | GET | `/rooms/:roomId` | 방 상세 조회 | JWT |
-| [ ] | POST | `/rooms/:roomId/join` | 방 참가 | JWT |
-| [ ] | POST | `/rooms/:roomId/leave` | 방 퇴장 | JWT |
-| [ ] | DELETE | `/rooms/:roomId` | 방 삭제 | JWT |
+| [x] | POST | `/rooms` | 방 생성 | JWT |
+| [x] | GET | `/rooms` | 방 목록 조회 | JWT |
+| [x] | GET | `/rooms/:roomId` | 방 상세 조회 | JWT |
+| [x] | POST | `/rooms/:roomId/join` | 방 참가 | JWT |
+| [x] | POST | `/rooms/:roomId/leave` | 방 퇴장 | JWT |
+| [x] | DELETE | `/rooms/:roomId` | 방 삭제 | JWT |
 
 ### Epic 06: Tournaments
 
@@ -92,17 +92,17 @@
 
 | 상태 | 방향 | 이벤트 | 설명 |
 |------|------|--------|------|
-| [ ] | S→C | `room:created` | 방 생성됨 |
-| [ ] | S→C | `room:updated` | 방 정보 변경 |
-| [ ] | S→C | `room:deleted` | 방 삭제됨 |
-| [ ] | S→C | `room:member:joined` | 멤버 참가 |
-| [ ] | S→C | `room:member:left` | 멤버 퇴장 |
-| [ ] | S→C | `room:member:ready` | 레디 상태 변경 |
-| [ ] | S→C | `room:game:starting` | 게임 시작 카운트다운 |
-| [ ] | C→S | `room:join` | 방 소켓 접속 |
-| [ ] | C→S | `room:leave` | 방 소켓 퇴장 |
-| [ ] | C→S | `room:ready` | 레디 토글 |
-| [ ] | C→S | `room:kick` | 멤버 강퇴 (호스트) |
+| [x] | S→C | `room:created` | 방 생성됨 |
+| [x] | S→C | `room:updated` | 방 정보 변경 |
+| [x] | S→C | `room:deleted` | 방 삭제됨 |
+| [x] | S→C | `room:member:joined` | 멤버 참가 |
+| [x] | S→C | `room:member:left` | 멤버 퇴장 |
+| [x] | S→C | `room:member:ready` | 레디 상태 변경 |
+| [x] | S→C | `room:game:starting` | 게임 시작 카운트다운 |
+| [x] | C→S | `room:join` | 방 소켓 접속 |
+| [x] | C→S | `room:leave` | 방 소켓 퇴장 |
+| [x] | C→S | `room:ready` | 레디 토글 |
+| [x] | C→S | `room:kick` | 멤버 강퇴 (호스트) |
 
 ### Namespace: `/game` (Epic 05)
 
