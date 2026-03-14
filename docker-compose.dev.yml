@@ -1,0 +1,11 @@
+services:
+  backend:
+    build:
+      context: ./apps/backend
+      target: builder
+    volumes:
+      - ./apps/backend/src:/app/src
+      - /app/node_modules
+    command: npm run start:dev
+    environment:
+      - NODE_ENV=development
