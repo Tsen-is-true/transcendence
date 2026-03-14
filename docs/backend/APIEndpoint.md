@@ -74,7 +74,7 @@
 
 | 상태 | Method | Path | 설명 | 인증 |
 |------|--------|------|------|------|
-| [ ] | GET | `/metrics` | Prometheus 메트릭 | - |
+| [x] | GET | `/metrics` | Prometheus 메트릭 | - |
 
 ### Epic 10: Chat
 
