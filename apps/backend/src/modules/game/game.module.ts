@@ -11,6 +11,7 @@ import { GameResultService } from './services/game-result.service';
 import { AuthModule } from '@modules/auth/auth.module';
 import { UsersModule } from '@modules/users/users.module';
 import { RoomsModule } from '@modules/rooms/rooms.module';
+import { AchievementsModule } from '@modules/achievements/achievements.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { RoomsModule } from '@modules/rooms/rooms.module';
     forwardRef(() => AuthModule),
     forwardRef(() => RoomsModule),
     UsersModule,
+    AchievementsModule,
   ],
   providers: [PongEngineService, GameGateway, GameResultService],
   exports: [TypeOrmModule, PongEngineService],

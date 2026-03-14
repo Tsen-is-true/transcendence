@@ -19,6 +19,7 @@ import { PongEngineService } from '../services/pong-engine.service';
 import { GameResultService } from '../services/game-result.service';
 import { UsersService } from '@modules/users/users.service';
 import { LobbyGateway } from '@modules/rooms/gateways/lobby.gateway';
+import { AchievementsService } from '@modules/achievements/achievements.service';
 import { GAME_CONFIG } from '../constants/game.constants';
 
 @WebSocketGateway({ namespace: '/game', cors: true })
@@ -40,6 +41,7 @@ export class GameGateway
     private readonly usersService: UsersService,
     @Inject(forwardRef(() => LobbyGateway))
     private readonly lobbyGateway: LobbyGateway,
+    private readonly achievementsService: AchievementsService,
     @InjectRepository(Match)
     private readonly matchRepo: Repository<Match>,
   ) {}
@@ -68,6 +70,25 @@ export class GameGateway
           case 'end':
             this.lobbyGateway.emitTournamentEnd(roomId, data);
             break;
+        }
+      },
+    );
+
+    this.gameResultService.setOnAchievementCheckCallback(
+      async (userId) => {
+        const newAchievements =
+          await this.achievementsService.checkAchievements(userId);
+        if (newAchievements.length > 0) {
+          const socketId = this.userSocket.get(userId);
+          if (socketId) {
+            this.server.to(socketId).emit('game:achievement', {
+              achievements: newAchievements.map((a) => ({
+                name: a.name,
+                displayName: a.displayName,
+                description: a.description,
+              })),
+            });
+          }
         }
       },
     );

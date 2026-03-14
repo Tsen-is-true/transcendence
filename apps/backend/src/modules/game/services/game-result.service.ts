@@ -30,10 +30,16 @@ export class GameResultService {
     data: any,
   ) => void;
 
+  private onAchievementCheckCallback?: (userId: number) => void;
+
   setOnFinalReadyCallback(
     callback: (roomId: number, matchId: number) => void,
   ) {
     this.onFinalReadyCallback = callback;
+  }
+
+  setOnAchievementCheckCallback(callback: (userId: number) => void) {
+    this.onAchievementCheckCallback = callback;
   }
 
   setOnTournamentEventCallback(
@@ -99,6 +105,12 @@ export class GameResultService {
       // 8. Process room/tournament
       await this.processRoomAfterGame(manager, game);
     });
+
+    // 9. Check achievements for both players (after transaction)
+    if (this.onAchievementCheckCallback) {
+      this.onAchievementCheckCallback(winnerId);
+      this.onAchievementCheckCallback(loserId);
+    }
   }
 
   private emitTournamentEvent(
