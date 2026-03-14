@@ -62,13 +62,13 @@
 
 | 상태 | Method | Path | 설명 | 인증 |
 |------|--------|------|------|------|
-| [ ] | POST | `/api/api-keys` | API Key 생성 | JWT |
-| [ ] | GET | `/api/api-keys` | 내 API Key 목록 | JWT |
-| [ ] | PUT | `/api/api-keys/:id` | API Key 수정 | JWT |
-| [ ] | DELETE | `/api/api-keys/:id` | API Key 삭제 | JWT |
-| [ ] | GET | `/api/matches` | 매치 조회 (Public) | API Key |
-| [ ] | GET | `/api/leaderboard` | 리더보드 (Public) | API Key |
-| [ ] | GET | `/api/users/:id/stats` | 유저 통계 (Public) | API Key |
+| [x] | POST | `/api/api-keys` | API Key 생성 | JWT |
+| [x] | GET | `/api/api-keys` | 내 API Key 목록 | JWT |
+| [x] | PUT | `/api/api-keys/:id` | API Key 수정 | JWT |
+| [x] | DELETE | `/api/api-keys/:id` | API Key 삭제 | JWT |
+| [x] | GET | `/api/public/matches` | 매치 조회 (Public) | API Key |
+| [x] | GET | `/api/public/leaderboard` | 리더보드 (Public) | API Key |
+| [x] | GET | `/api/public/users/:id/stats` | 유저 통계 (Public) | API Key |
 
 ### Epic 09: Monitoring
 
