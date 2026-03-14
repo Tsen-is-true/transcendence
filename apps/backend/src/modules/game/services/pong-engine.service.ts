@@ -16,11 +16,11 @@ export class PongEngineService {
   private broadcastLoops = new Map<number, NodeJS.Timeout>();
 
   private onScoreCallback?: (matchId: number, event: ScoreEvent) => void;
-  private onGameEndCallback?: (matchId: number, winnerId: number) => void;
+  private onGameEndCallback?: (matchId: number, winnerId: number) => void | Promise<void>;
 
   setCallbacks(callbacks: {
     onScore: (matchId: number, event: ScoreEvent) => void;
-    onGameEnd: (matchId: number, winnerId: number) => void;
+    onGameEnd: (matchId: number, winnerId: number) => void | Promise<void>;
   }) {
     this.onScoreCallback = callbacks.onScore;
     this.onGameEndCallback = callbacks.onGameEnd;

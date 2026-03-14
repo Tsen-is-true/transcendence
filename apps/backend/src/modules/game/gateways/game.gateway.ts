@@ -16,6 +16,7 @@ import { Repository } from 'typeorm';
 import { JwtPayload } from '@common/interfaces/jwt-payload.interface';
 import { Match, MatchStatus } from '../entities/match.entity';
 import { PongEngineService } from '../services/pong-engine.service';
+import { GameResultService } from '../services/game-result.service';
 import { UsersService } from '@modules/users/users.service';
 import { GAME_CONFIG } from '../constants/game.constants';
 
@@ -34,6 +35,7 @@ export class GameGateway
   constructor(
     private readonly jwtService: JwtService,
     private readonly pongEngine: PongEngineService,
+    private readonly gameResultService: GameResultService,
     private readonly usersService: UsersService,
     @InjectRepository(Match)
     private readonly matchRepo: Repository<Match>,
@@ -50,19 +52,20 @@ export class GameGateway
             scorerId: event.scorerId,
           });
       },
-      onGameEnd: (matchId, winnerId) => {
+      onGameEnd: async (matchId, winnerId) => {
         const game = this.pongEngine.getGame(matchId);
-        this.server
-          .to(`match:${matchId}`)
-          .emit('game:end', {
-            winnerId,
-            finalScore: game
-              ? {
-                  player1Score: game.players.player1.score,
-                  player2Score: game.players.player2.score,
-                }
-              : null,
-          });
+        if (!game) return;
+
+        this.server.to(`match:${matchId}`).emit('game:end', {
+          winnerId,
+          finalScore: {
+            player1Score: game.players.player1.score,
+            player2Score: game.players.player2.score,
+          },
+        });
+
+        await this.gameResultService.processGameEnd(game, winnerId);
+        this.pongEngine.removeGame(matchId);
       },
     });
   }
@@ -292,6 +295,11 @@ export class GameGateway
       },
     });
 
+    await this.gameResultService.processGameEnd(
+      game,
+      winnerId,
+      MatchStatus.WALKOVER,
+    );
     this.pongEngine.removeGame(matchId);
   }
 
