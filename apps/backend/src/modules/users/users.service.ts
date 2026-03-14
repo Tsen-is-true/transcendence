@@ -2,12 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
 import { User } from './entities/user.entity';
+import { Match, MatchStatus } from '@modules/game/entities/match.entity';
+import { Score } from '@modules/game/entities/score.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
+    @InjectRepository(Match)
+    private readonly matchRepo: Repository<Match>,
+    @InjectRepository(Score)
+    private readonly scoreRepo: Repository<Score>,
   ) {}
 
   async findByEmail(email: string): Promise<User | null> {
@@ -94,6 +100,80 @@ export class UsersService {
       xpToNextLevel,
       streak: user.streak,
       maxStreak: user.maxStreak,
+    };
+  }
+
+  async getMatchHistory(
+    userid: number,
+    page: number,
+    limit: number,
+    type: string,
+  ) {
+    const qb = this.matchRepo
+      .createQueryBuilder('m')
+      .where('(m.player1Id = :uid OR m.player2Id = :uid)', { uid: userid })
+      .andWhere('m.status IN (:...statuses)', {
+        statuses: [MatchStatus.FINISHED, MatchStatus.WALKOVER],
+      });
+
+    if (type === '1v1') {
+      qb.andWhere('m.tournamentId IS NULL');
+    } else if (type === 'tournament') {
+      qb.andWhere('m.tournamentId IS NOT NULL');
+    }
+
+    const total = await qb.getCount();
+
+    const matches = await qb
+      .orderBy('m.finishAt', 'DESC')
+      .skip((page - 1) * limit)
+      .take(limit)
+      .getMany();
+
+    const data = await Promise.all(
+      matches.map(async (m) => {
+        const opponentId =
+          m.player1Id === userid ? m.player2Id : m.player1Id;
+        const opponent = opponentId
+          ? await this.getPublicProfile(opponentId)
+          : null;
+        const score = await this.scoreRepo.findOne({
+          where: { matchId: m.matchId },
+        });
+
+        const isPlayer1 = m.player1Id === userid;
+
+        return {
+          matchId: m.matchId,
+          result: m.winnerId === userid ? 'win' : 'loss',
+          type: m.tournamentId ? 'tournament' : '1v1',
+          opponent: opponent
+            ? {
+                userId: opponent.userid,
+                nickname: opponent.nickname,
+                avatarUrl: opponent.avatarUrl,
+              }
+            : null,
+          score: score
+            ? {
+                my: isPlayer1 ? score.player1Score : score.player2Score,
+                opponent: isPlayer1 ? score.player2Score : score.player1Score,
+              }
+            : null,
+          startAt: m.startAt,
+          finishAt: m.finishAt,
+        };
+      }),
+    );
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
     };
   }
 

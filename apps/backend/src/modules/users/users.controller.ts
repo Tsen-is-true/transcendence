@@ -29,6 +29,7 @@ import { CurrentUser } from '@common/decorators/current-user.decorator';
 import { UsersService } from './users.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { SearchUsersDto } from './dto/search-users.dto';
+import { MatchHistoryDto } from './dto/match-history.dto';
 
 const AVATAR_DIR = path.join(process.cwd(), 'uploads', 'avatars');
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -101,6 +102,20 @@ export class UsersController {
     await this.usersService.update(userId, { avatarUrl });
 
     return { avatarUrl };
+  }
+
+  @Get(':id/matches')
+  @ApiOperation({ summary: '매치 히스토리 조회' })
+  async getMatchHistory(
+    @Param('id', ParseIntPipe) id: number,
+    @Query() dto: MatchHistoryDto,
+  ) {
+    return this.usersService.getMatchHistory(
+      id,
+      dto.page!,
+      dto.limit!,
+      dto.type!,
+    );
   }
 
   @Get(':id/stats')
