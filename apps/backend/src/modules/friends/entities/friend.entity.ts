@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  Unique,
 } from 'typeorm';
 
 export enum FriendStatus {
@@ -13,6 +14,7 @@ export enum FriendStatus {
 }
 
 @Entity('friends')
+@Unique(['requesterId', 'addresseeId'])
 export class Friend {
   @PrimaryGeneratedColumn()
   friendshipId!: number;
