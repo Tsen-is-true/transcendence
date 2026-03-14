@@ -52,6 +52,26 @@ export class RoomsController {
     return this.roomsService.findOne(roomId);
   }
 
+  @Post(':roomId/join')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: '방 참가' })
+  async join(
+    @CurrentUser('sub') userId: number,
+    @Param('roomId', ParseIntPipe) roomId: number,
+  ) {
+    return this.roomsService.join(roomId, userId);
+  }
+
+  @Post(':roomId/leave')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: '방 퇴장' })
+  async leave(
+    @CurrentUser('sub') userId: number,
+    @Param('roomId', ParseIntPipe) roomId: number,
+  ) {
+    return this.roomsService.leave(roomId, userId);
+  }
+
   @Delete(':roomId')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: '방 삭제 (방장만)' })

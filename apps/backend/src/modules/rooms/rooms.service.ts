@@ -2,9 +2,11 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  BadRequestException,
+  ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, FindOptionsWhere } from 'typeorm';
+import { Repository, DataSource, FindOptionsWhere } from 'typeorm';
 import { Room, RoomStatus } from './entities/room.entity';
 import { RoomMember } from './entities/room-member.entity';
 import { UsersService } from '@modules/users/users.service';
@@ -18,6 +20,7 @@ export class RoomsService {
     @InjectRepository(RoomMember)
     private readonly memberRepo: Repository<RoomMember>,
     private readonly usersService: UsersService,
+    private readonly dataSource: DataSource,
   ) {}
 
   async create(dto: CreateRoomDto, userId: number) {
@@ -129,5 +132,91 @@ export class RoomsService {
 
     await this.memberRepo.delete({ roomId });
     await this.roomRepo.remove(room);
+  }
+
+  async join(roomId: number, userId: number) {
+    return this.dataSource.transaction(async (manager) => {
+      const roomRepo = manager.getRepository(Room);
+      const memberRepo = manager.getRepository(RoomMember);
+
+      const room = await roomRepo.findOne({
+        where: { roomId },
+        lock: { mode: 'pessimistic_write' },
+      });
+
+      if (!room) {
+        throw new NotFoundException('방을 찾을 수 없습니다');
+      }
+      if (room.status !== RoomStatus.WAITING) {
+        throw new BadRequestException('대기 중인 방에만 참가할 수 있습니다');
+      }
+      if (room.countPlayers >= room.maxPlayers) {
+        throw new BadRequestException('방이 가득 찼습니다');
+      }
+
+      const existingMember = await memberRepo.findOne({
+        where: { roomId, userId },
+      });
+      if (existingMember) {
+        throw new ConflictException('이미 참가 중인 방입니다');
+      }
+
+      const inOtherRoom = await memberRepo.findOne({ where: { userId } });
+      if (inOtherRoom) {
+        throw new BadRequestException('이미 다른 방에 참가 중입니다');
+      }
+
+      const member = memberRepo.create({ roomId, userId });
+      await memberRepo.save(member);
+
+      room.countPlayers += 1;
+      await roomRepo.save(room);
+
+      return { roomId, userId, message: '방에 참가했습니다' };
+    });
+  }
+
+  async leave(roomId: number, userId: number) {
+    return this.dataSource.transaction(async (manager) => {
+      const roomRepo = manager.getRepository(Room);
+      const memberRepo = manager.getRepository(RoomMember);
+
+      const room = await roomRepo.findOne({
+        where: { roomId },
+        lock: { mode: 'pessimistic_write' },
+      });
+
+      if (!room) {
+        throw new NotFoundException('방을 찾을 수 없습니다');
+      }
+
+      const member = await memberRepo.findOne({
+        where: { roomId, userId },
+      });
+      if (!member) {
+        throw new BadRequestException('방에 참가하고 있지 않습니다');
+      }
+
+      await memberRepo.remove(member);
+      room.countPlayers -= 1;
+
+      if (room.countPlayers <= 0) {
+        await roomRepo.remove(room);
+        return { roomId, userId, roomDeleted: true };
+      }
+
+      if (room.hostUserId === userId) {
+        const nextHost = await memberRepo.findOne({
+          where: { roomId },
+          order: { joinedAt: 'ASC' },
+        });
+        if (nextHost) {
+          room.hostUserId = nextHost.userId;
+        }
+      }
+
+      await roomRepo.save(room);
+      return { roomId, userId, roomDeleted: false, newHostUserId: room.hostUserId };
+    });
   }
 }
