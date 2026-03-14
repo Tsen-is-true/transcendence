@@ -80,9 +80,9 @@
 
 | 상태 | Method | Path | 설명 | 인증 |
 |------|--------|------|------|------|
-| [ ] | GET | `/chat/conversations` | 대화 목록 조회 | JWT |
-| [ ] | GET | `/chat/messages/:userId` | 대화 내역 조회 (커서 페이지네이션) | JWT |
-| [ ] | POST | `/chat/messages/:userId/read` | 메시지 읽음 처리 | JWT |
+| [x] | GET | `/chat/conversations` | 대화 목록 조회 | JWT |
+| [x] | GET | `/chat/messages/:userId` | 대화 내역 조회 (커서 페이지네이션) | JWT |
+| [x] | POST | `/chat/messages/:userId/read` | 메시지 읽음 처리 | JWT |
 
 ---
 
@@ -132,9 +132,9 @@
 
 | 상태 | 방향 | 이벤트 | 설명 |
 |------|------|--------|------|
-| [ ] | S→C | `chat:message` | 메시지 수신 |
-| [ ] | S→C | `chat:read` | 읽음 확인 |
-| [ ] | S→C | `chat:typing` | 타이핑 표시 |
-| [ ] | C→S | `chat:send` | 메시지 전송 |
-| [ ] | C→S | `chat:read` | 읽음 처리 |
-| [ ] | C→S | `chat:typing` | 타이핑 상태 전송 |
+| [x] | S→C | `chat:message` | 메시지 수신 |
+| [x] | S→C | `chat:read` | 읽음 확인 |
+| [x] | S→C | `chat:typing` | 타이핑 표시 |
+| [x] | C→S | `chat:send` | 메시지 전송 |
+| [x] | C→S | `chat:read` | 읽음 처리 |
+| [x] | C→S | `chat:typing` | 타이핑 상태 전송 |
