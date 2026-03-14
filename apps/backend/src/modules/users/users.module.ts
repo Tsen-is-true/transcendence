@@ -5,6 +5,7 @@ import { Match } from '@modules/game/entities/match.entity';
 import { Score } from '@modules/game/entities/score.entity';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
+import { LeaderboardController } from './leaderboard.controller';
 import { StatusGateway } from './gateways/status.gateway';
 import { FriendsModule } from '@modules/friends/friends.module';
 import { AuthModule } from '@modules/auth/auth.module';
@@ -15,7 +16,7 @@ import { AuthModule } from '@modules/auth/auth.module';
     forwardRef(() => FriendsModule),
     forwardRef(() => AuthModule),
   ],
-  controllers: [UsersController],
+  controllers: [UsersController, LeaderboardController],
   providers: [UsersService, StatusGateway],
   exports: [TypeOrmModule, UsersService],
 })

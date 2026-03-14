@@ -194,4 +194,31 @@ export class UsersService {
       totalPages: Math.ceil(total / limit),
     };
   }
+
+  async getLeaderboard(type: string, limit: number) {
+    const orderMap: Record<string, Record<string, 'ASC' | 'DESC'>> = {
+      elo: { elo: 'DESC' },
+      wins: { wins: 'DESC' },
+      level: { level: 'DESC', xp: 'DESC' },
+    };
+
+    const order = orderMap[type] || orderMap.elo;
+
+    const users = await this.userRepo.find({
+      select: ['userid', 'nickname', 'avatarUrl', 'elo', 'wins', 'loses', 'level'],
+      order,
+      take: limit,
+    });
+
+    return users.map((u, i) => ({
+      rank: i + 1,
+      userId: u.userid,
+      nickname: u.nickname,
+      avatarUrl: u.avatarUrl,
+      elo: u.elo,
+      wins: u.wins,
+      loses: u.loses,
+      level: u.level,
+    }));
+  }
 }
