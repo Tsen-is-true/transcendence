@@ -137,4 +137,43 @@ export class AuthService {
   async logout(userId: number) {
     await this.usersService.update(userId, { hashedRefreshToken: null });
   }
+
+  async validateOAuthUser(profile: {
+    intraId: string;
+    email: string;
+    nickname: string;
+    avatarUrl: string | null;
+  }): Promise<User> {
+    const existingOAuthUser = await this.usersService.findByOAuthId(
+      '42',
+      profile.intraId,
+    );
+    if (existingOAuthUser) {
+      return existingOAuthUser;
+    }
+
+    const existingEmailUser = await this.usersService.findByEmail(
+      profile.email,
+    );
+    if (existingEmailUser) {
+      throw new ConflictException(
+        '이미 이메일로 가입된 계정입니다. 이메일/비밀번호로 로그인해주세요',
+      );
+    }
+
+    let nickname = profile.nickname;
+    const existingNickname = await this.usersService.findByNickname(nickname);
+    if (existingNickname) {
+      nickname = `${nickname}_42`;
+    }
+
+    return this.usersService.create({
+      email: profile.email,
+      nickname,
+      intraId: profile.intraId,
+      oauthProvider: '42',
+      oauthId: profile.intraId,
+      avatarUrl: profile.avatarUrl,
+    });
+  }
 }

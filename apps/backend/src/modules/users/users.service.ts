@@ -22,6 +22,15 @@ export class UsersService {
     return this.userRepo.findOne({ where: { userid } });
   }
 
+  async findByOAuthId(
+    provider: string,
+    oauthId: string,
+  ): Promise<User | null> {
+    return this.userRepo.findOne({
+      where: { oauthProvider: provider, oauthId },
+    });
+  }
+
   async create(data: Partial<User>): Promise<User> {
     const user = this.userRepo.create(data);
     return this.userRepo.save(user);

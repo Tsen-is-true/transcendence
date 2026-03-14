@@ -1,15 +1,21 @@
 import {
   Controller,
   Post,
+  Get,
   Body,
+  Query,
+  Res,
   UseGuards,
   Request,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { Response } from 'express';
+import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
+import { FtOAuthService } from './strategies/ft-oauth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
@@ -19,7 +25,11 @@ import { CurrentUser } from '@common/decorators/current-user.decorator';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly ftOAuthService: FtOAuthService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
@@ -51,5 +61,26 @@ export class AuthController {
   async logout(@CurrentUser('sub') userId: number) {
     await this.authService.logout(userId);
     return { message: '로그아웃되었습니다' };
+  }
+
+  @Get('42')
+  @ApiOperation({ summary: '42 OAuth 로그인 리다이렉트' })
+  async ft42Auth(@Res() res: Response) {
+    const url = this.ftOAuthService.getAuthorizationUrl();
+    return res.redirect(url);
+  }
+
+  @Get('42/callback')
+  @ApiOperation({ summary: '42 OAuth 콜백' })
+  async ft42Callback(@Query('code') code: string, @Res() res: Response) {
+    const ftAccessToken = await this.ftOAuthService.exchangeCodeForToken(code);
+    const profile = await this.ftOAuthService.getUserInfo(ftAccessToken);
+    const user = await this.authService.validateOAuthUser(profile);
+    const tokens = await this.authService.login(user);
+
+    const frontendUrl = this.configService.get<string>('cors.origin');
+    return res.redirect(
+      `${frontendUrl}/auth/callback?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}`,
+    );
   }
 }
