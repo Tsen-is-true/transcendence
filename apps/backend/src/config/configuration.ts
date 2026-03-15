@@ -15,4 +15,13 @@ export default () => ({
   cors: {
     origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
   },
+  oauth: {
+    ft: {
+      clientId: process.env.OAUTH_42_CLIENT_ID || '',
+      clientSecret: process.env.OAUTH_42_CLIENT_SECRET || '',
+      callbackUrl:
+        process.env.OAUTH_42_CALLBACK_URL ||
+        'http://localhost:3001/api/auth/42/callback',
+    },
+  },
 });

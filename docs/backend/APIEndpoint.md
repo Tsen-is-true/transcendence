@@ -10,12 +10,12 @@
 
 | 상태 | Method | Path | 설명 | 인증 |
 |------|--------|------|------|------|
-| [ ] | POST | `/auth/register` | 이메일/비밀번호 회원가입 | - |
-| [ ] | POST | `/auth/login` | 로그인 | - |
-| [ ] | POST | `/auth/refresh` | Access Token 갱신 | Refresh Token |
-| [ ] | GET | `/auth/42` | 42 OAuth 로그인 리다이렉트 | - |
-| [ ] | GET | `/auth/42/callback` | 42 OAuth 콜백 | - |
-| [ ] | POST | `/auth/logout` | 로그아웃 (Refresh Token 무효화) | JWT |
+| [x] | POST | `/auth/register` | 이메일/비밀번호 회원가입 | - |
+| [x] | POST | `/auth/login` | 로그인 | - |
+| [x] | POST | `/auth/refresh` | Access Token 갱신 | Refresh Token |
+| [x] | GET | `/auth/42` | 42 OAuth 로그인 리다이렉트 | - |
+| [x] | GET | `/auth/42/callback` | 42 OAuth 콜백 | - |
+| [x] | POST | `/auth/logout` | 로그아웃 (Refresh Token 무효화) | JWT |
 
 ### Epic 03: Users
 

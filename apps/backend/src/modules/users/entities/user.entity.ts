@@ -20,7 +20,7 @@ export class User {
   @Column({ type: 'varchar', length: 255, nullable: true })
   password!: string | null;
 
-  @Column({ type: 'varchar', length: 50 })
+  @Column({ type: 'varchar', length: 50, unique: true })
   nickname!: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
@@ -52,6 +52,9 @@ export class User {
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   oauthId!: string | null;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  hashedRefreshToken!: string | null;
 
   @Column({ type: 'boolean', default: false })
   isPlaying!: boolean;
