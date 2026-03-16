@@ -149,6 +149,11 @@ export class FriendsService {
     return this.friendRepo.save(friend);
   }
 
+  async isBlocked(userA: number, userB: number): Promise<boolean> {
+    const relation = await this.findRelation(userA, userB);
+    return relation?.status === FriendStatus.BLOCKED;
+  }
+
   async getFriendUserIds(userId: number): Promise<number[]> {
     const friendships = await this.friendRepo.find({
       where: [
