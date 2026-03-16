@@ -16,7 +16,7 @@ async function bootstrap() {
     prefix: '/uploads/',
   });
 
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api', { exclude: ['metrics'] });
 
   app.enableCors({
     origin: configService.get<string>('cors.origin'),
