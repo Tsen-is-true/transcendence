@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ThrottlerModule } from '@nestjs/throttler';
 import configuration from './config/configuration';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
@@ -32,6 +33,7 @@ import { MonitoringModule } from './modules/monitoring/monitoring.module';
         synchronize: process.env.NODE_ENV !== 'production',
       }),
     }),
+    ThrottlerModule.forRoot([{ ttl: 60000, limit: 60 }]),
     AuthModule,
     UsersModule,
     RoomsModule,
