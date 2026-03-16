@@ -343,6 +343,17 @@ export class RoomsService {
 
     const shuffled = [...members].sort(() => Math.random() - 0.5);
 
+    // Create final match first (for nextMatchId linking)
+    const finalMatch = this.matchRepo.create({
+      tournamentId: savedTournament.tournamentId,
+      roomId: room.roomId,
+      status: MatchStatus.WAITING,
+      round: 2,
+      matchOrder: 1,
+    });
+    const savedFinal = await this.matchRepo.save(finalMatch);
+
+    // Create semi-final matches with nextMatchId
     const match1 = this.matchRepo.create({
       tournamentId: savedTournament.tournamentId,
       roomId: room.roomId,
@@ -351,6 +362,7 @@ export class RoomsService {
       status: MatchStatus.WAITING,
       round: 1,
       matchOrder: 1,
+      nextMatchId: savedFinal.matchId,
     });
 
     const match2 = this.matchRepo.create({
@@ -361,6 +373,7 @@ export class RoomsService {
       status: MatchStatus.WAITING,
       round: 1,
       matchOrder: 2,
+      nextMatchId: savedFinal.matchId,
     });
 
     const savedMatch1 = await this.matchRepo.save(match1);

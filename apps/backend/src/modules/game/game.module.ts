@@ -10,11 +10,13 @@ import { GameGateway } from './gateways/game.gateway';
 import { GameResultService } from './services/game-result.service';
 import { AuthModule } from '@modules/auth/auth.module';
 import { UsersModule } from '@modules/users/users.module';
+import { RoomsModule } from '@modules/rooms/rooms.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Match, Score, Room, Tournament, TournamentParticipant]),
     forwardRef(() => AuthModule),
+    forwardRef(() => RoomsModule),
     UsersModule,
   ],
   providers: [PongEngineService, GameGateway, GameResultService],

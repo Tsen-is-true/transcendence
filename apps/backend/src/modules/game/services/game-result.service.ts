@@ -19,6 +19,33 @@ const XP_LOSS = 10;
 
 @Injectable()
 export class GameResultService {
+  private onFinalReadyCallback?: (
+    roomId: number,
+    matchId: number,
+  ) => void;
+
+  private onTournamentEventCallback?: (
+    type: 'match:end' | 'match:start' | 'update' | 'end',
+    roomId: number,
+    data: any,
+  ) => void;
+
+  setOnFinalReadyCallback(
+    callback: (roomId: number, matchId: number) => void,
+  ) {
+    this.onFinalReadyCallback = callback;
+  }
+
+  setOnTournamentEventCallback(
+    callback: (
+      type: 'match:end' | 'match:start' | 'update' | 'end',
+      roomId: number,
+      data: any,
+    ) => void,
+  ) {
+    this.onTournamentEventCallback = callback;
+  }
+
   constructor(
     @InjectRepository(Match)
     private readonly matchRepo: Repository<Match>,
@@ -72,6 +99,16 @@ export class GameResultService {
       // 8. Process room/tournament
       await this.processRoomAfterGame(manager, game);
     });
+  }
+
+  private emitTournamentEvent(
+    type: 'match:end' | 'match:start' | 'update' | 'end',
+    roomId: number,
+    data: any,
+  ) {
+    if (this.onTournamentEventCallback) {
+      this.onTournamentEventCallback(type, roomId, data);
+    }
   }
 
   private async updatePlayerStats(
@@ -145,31 +182,54 @@ export class GameResultService {
       { status: ParticipantStatus.ELIMINATED },
     );
 
-    if (match.round === 1) {
-      // Check if both semi-finals are done
-      const semiMatches = await matchRepo.find({
-        where: { tournamentId: match.tournamentId, round: 1 },
+    // Emit tournament:match:end
+    this.emitTournamentEvent('match:end', game.roomId, {
+      matchId: match.matchId,
+      winnerId: match.winnerId,
+      round: match.round,
+      matchOrder: match.matchOrder,
+    });
+
+    if (match.round === 1 && match.nextMatchId) {
+      // Assign winner to next match (final)
+      const nextMatch = await matchRepo.findOne({
+        where: { matchId: match.nextMatchId },
       });
+      if (nextMatch) {
+        if (!nextMatch.player1Id) {
+          nextMatch.player1Id = match.winnerId;
+        } else {
+          nextMatch.player2Id = match.winnerId;
+        }
+        await matchRepo.save(nextMatch);
 
-      const allDone = semiMatches.every(
-        (m: Match) =>
-          m.status === MatchStatus.FINISHED ||
-          m.status === MatchStatus.WALKOVER,
-      );
-
-      if (allDone) {
-        // Create final match
-        const winners = semiMatches.map((m: Match) => m.winnerId!);
-        await matchRepo.save({
+        // Emit tournament:update after winner assignment
+        this.emitTournamentEvent('update', game.roomId, {
           tournamentId: match.tournamentId,
-          roomId: game.roomId,
-          player1Id: winners[0],
-          player2Id: winners[1],
-          round: 2,
-          matchOrder: 1,
-          status: MatchStatus.WAITING,
         });
-        await tournamentRepo.update(match.tournamentId, { currentRound: 2 });
+
+        // Both players assigned → schedule final match after 10s
+        if (nextMatch.player1Id && nextMatch.player2Id) {
+          await tournamentRepo.update(match.tournamentId, {
+            currentRound: 2,
+          });
+
+          // Emit tournament:match:start for final
+          this.emitTournamentEvent('match:start', game.roomId, {
+            matchId: nextMatch.matchId,
+            player1Id: nextMatch.player1Id,
+            player2Id: nextMatch.player2Id,
+            round: 2,
+          });
+
+          // Schedule final match start via callback
+          if (this.onFinalReadyCallback) {
+            this.onFinalReadyCallback(
+              game.roomId,
+              nextMatch.matchId,
+            );
+          }
+        }
       }
     } else if (match.round === 2) {
       // Final match done
@@ -184,6 +244,12 @@ export class GameResultService {
       await manager
         .getRepository(Room)
         .update({ roomId: game.roomId }, { status: RoomStatus.FINISHED });
+
+      // Emit tournament:end
+      this.emitTournamentEvent('end', game.roomId, {
+        tournamentId: match.tournamentId,
+        winnerId: match.winnerId,
+      });
     }
   }
 }
