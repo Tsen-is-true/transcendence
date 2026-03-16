@@ -21,16 +21,16 @@
 
 | 상태 | Method | Path | 설명 | 인증 |
 |------|--------|------|------|------|
-| [ ] | GET | `/users/me` | 내 프로필 조회 | JWT |
-| [ ] | PATCH | `/users/me` | 내 프로필 수정 | JWT |
-| [ ] | POST | `/users/me/avatar` | 아바타 업로드 | JWT |
-| [ ] | GET | `/users/:id` | 유저 프로필 조회 | JWT |
-| [ ] | GET | `/users?search={query}` | 유저 검색 | JWT |
-| [ ] | POST | `/friends/:userId` | 친구 요청 | JWT |
-| [ ] | PATCH | `/friends/:friendshipId/accept` | 친구 요청 수락 | JWT |
-| [ ] | DELETE | `/friends/:friendshipId` | 친구 삭제/거절 | JWT |
-| [ ] | GET | `/friends` | 친구 목록 조회 | JWT |
-| [ ] | POST | `/friends/:userId/block` | 유저 차단 | JWT |
+| [x] | GET | `/users/me` | 내 프로필 조회 | JWT |
+| [x] | PATCH | `/users/me` | 내 프로필 수정 | JWT |
+| [x] | POST | `/users/me/avatar` | 아바타 업로드 | JWT |
+| [x] | GET | `/users/:id` | 유저 프로필 조회 | JWT |
+| [x] | GET | `/users?search={query}` | 유저 검색 | JWT |
+| [x] | POST | `/friends/:userId` | 친구 요청 | JWT |
+| [x] | PATCH | `/friends/:friendshipId/accept` | 친구 요청 수락 | JWT |
+| [x] | DELETE | `/friends/:friendshipId` | 친구 삭제/거절 | JWT |
+| [x] | GET | `/friends` | 친구 목록 조회 | JWT |
+| [x] | POST | `/friends/:userId/block` | 유저 차단 | JWT |
 
 ### Epic 04: Rooms
 
