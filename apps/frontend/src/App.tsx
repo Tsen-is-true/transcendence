@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { Home, GamePage, OnlineGame, Login, Register, Profile, Settings, Leaderboard, Friends, PrivacyPolicy, TermsOfService, NotFound, LobbyList, RoomView } from './pages';
 import { AuthProvider } from './contexts/AuthContext';
+import { ProtectedRoute } from './routes/AuthGuards';
 
 function App() {
   return (
@@ -11,13 +12,48 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/:id" element={<Profile />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route
+          path="/settings"
+          element={(
+            <ProtectedRoute>
+              <Settings />
+            </ProtectedRoute>
+          )}
+        />
         <Route path="/leaderboard" element={<Leaderboard />} />
-        <Route path="/friends" element={<Friends />} />
-        <Route path="/lobby" element={<LobbyList />} />
-        <Route path="/rooms/:id" element={<RoomView />} />
+        <Route
+          path="/friends"
+          element={(
+            <ProtectedRoute>
+              <Friends />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/lobby"
+          element={(
+            <ProtectedRoute>
+              <LobbyList />
+            </ProtectedRoute>
+          )}
+        />
+        <Route
+          path="/rooms/:id"
+          element={(
+            <ProtectedRoute>
+              <RoomView />
+            </ProtectedRoute>
+          )}
+        />
         <Route path="/game" element={<GamePage />} />
-        <Route path="/game/:matchId" element={<OnlineGame />} />
+        <Route
+          path="/game/:matchId"
+          element={(
+            <ProtectedRoute>
+              <OnlineGame />
+            </ProtectedRoute>
+          )}
+        />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfService />} />
         <Route path="*" element={<NotFound />} />
