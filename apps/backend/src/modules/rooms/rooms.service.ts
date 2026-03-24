@@ -8,7 +8,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource, FindOptionsWhere } from 'typeorm';
+import { Repository, DataSource, FindOptionsWhere, Not } from 'typeorm';
 import { Room, RoomStatus } from './entities/room.entity';
 import { RoomMember } from './entities/room-member.entity';
 import { Match, MatchStatus } from '@modules/game/entities/match.entity';
@@ -68,8 +68,25 @@ export class RoomsService {
   ) {
     const where: FindOptionsWhere<Room> = {};
 
+    // Auto-cleanup orphaned empty rooms that are not PLAYING
+    const orphans = await this.roomRepo
+      .createQueryBuilder('room')
+      .leftJoin('room_members', 'member', 'member.roomId = room.roomId')
+      .where('room.status IN (:...statuses)', { statuses: [RoomStatus.WAITING, RoomStatus.FINISHED, RoomStatus.PLAYING] })
+      .groupBy('room.roomId')
+      .having('COUNT(member.roomMemberId) = 0')
+      .getMany();
+
+    if (orphans.length > 0) {
+      await this.roomRepo.remove(orphans);
+      orphans.forEach((r) => this.lobbyGateway.emitRoomDeleted(r.roomId));
+    }
+
     if (status && status !== 'all') {
       where.status = status as RoomStatus;
+    } else {
+      // Exclude FINISHED rooms from regular lists
+      where.status = Not(RoomStatus.FINISHED);
     }
     if (isTournament !== undefined) {
       where.isTournament = isTournament;
@@ -128,13 +145,31 @@ export class RoomsService {
 
     const host = await this.usersService.getPublicProfile(room.hostUserId);
 
+    let tournamentId: number | null = null;
+    if (room.isTournament) {
+      const tournament = await this.tournamentRepo.findOne({ where: { roomId } });
+      if (tournament) tournamentId = tournament.tournamentId;
+    }
+
+    const match = await this.matchRepo.findOne({
+      where: { roomId },
+      order: { matchId: 'DESC' },
+    });
+
     return {
       ...room,
       host: host
         ? { userid: host.userid, nickname: host.nickname, avatarUrl: host.avatarUrl }
         : null,
       members: membersWithUser,
+      tournamentId,
+      currentMatchId: match ? match.matchId : null,
     };
+  }
+
+  async isMember(roomId: number, userId: number): Promise<boolean> {
+    const member = await this.memberRepo.findOne({ where: { roomId, userId } });
+    return !!member;
   }
 
   async remove(roomId: number, userId: number) {
@@ -165,12 +200,23 @@ export class RoomsService {
         throw new NotFoundException('방을 찾을 수 없습니다');
       }
       if (room.status !== RoomStatus.WAITING) {
-        throw new BadRequestException('대기 중인 방에만 참가할 수 있습니다');
-      }
-      if (room.countPlayers >= room.maxPlayers) {
-        throw new BadRequestException('방이 가득 찼습니다');
-      }
+        let isParticipant = false;
+        if (room.isTournament && (room.status === RoomStatus.PLAYING || room.status === RoomStatus.FINISHED)) {
+          const tournament = await manager.getRepository(Tournament).findOne({ where: { roomId: room.roomId } });
+          if (tournament) {
+            const participant = await manager.getRepository(TournamentParticipant).findOne({
+              where: { tournamentId: tournament.tournamentId, userId },
+            });
+            if (participant) {
+              isParticipant = true;
+            }
+          }
+        }
 
+        if (!isParticipant) {
+          throw new BadRequestException('대기 중인 방에만 참가할 수 있습니다');
+        }
+      }
       const existingMember = await memberRepo.findOne({
         where: { roomId, userId },
       });
@@ -178,10 +224,11 @@ export class RoomsService {
         throw new ConflictException('이미 참가 중인 방입니다');
       }
 
-      const inOtherRoom = await memberRepo.findOne({ where: { userId } });
-      if (inOtherRoom) {
-        throw new BadRequestException('이미 다른 방에 참가 중입니다');
+      const memberCount = await memberRepo.count({ where: { roomId } });
+      if (memberCount >= room.maxPlayers) {
+        throw new BadRequestException('방이 가득 찼습니다');
       }
+
 
       const member = memberRepo.create({ roomId, userId });
       await memberRepo.save(member);
@@ -223,6 +270,7 @@ export class RoomsService {
 
       this.lobbyGateway.emitMemberLeft(roomId, userId);
 
+      // Only delete the room when empty
       if (room.countPlayers <= 0) {
         await roomRepo.remove(room);
         this.lobbyGateway.emitRoomDeleted(roomId);
@@ -284,6 +332,7 @@ export class RoomsService {
     await this.roomRepo.save(room);
 
     this.lobbyGateway.emitMemberLeft(roomId, targetUserId);
+    this.lobbyGateway.emitMemberKicked(roomId, targetUserId);
     this.lobbyGateway.emitRoomUpdated(room);
   }
 
@@ -322,7 +371,12 @@ export class RoomsService {
     room.status = RoomStatus.PLAYING;
     await this.roomRepo.save(room);
 
-    this.lobbyGateway.emitGameStarting(room.roomId, savedMatch.matchId);
+    this.lobbyGateway.emitGameStarting(
+      room.roomId,
+      savedMatch.matchId,
+      savedMatch.player1Id ?? undefined,
+      savedMatch.player2Id ?? undefined,
+    );
     this.lobbyGateway.emitRoomUpdated(room);
   }
 
@@ -353,6 +407,18 @@ export class RoomsService {
     });
     const savedFinal = await this.matchRepo.save(finalMatch);
 
+    // Create 3rd place match
+    const thirdPlaceMatch = this.matchRepo.create({
+      tournamentId: savedTournament.tournamentId,
+      roomId: room.roomId,
+      status: MatchStatus.WAITING,
+      round: 2,
+      matchOrder: 2,
+    });
+    const savedThirdPlace = await this.matchRepo.save(thirdPlaceMatch);
+
+
+
     // Create semi-final matches with nextMatchId
     const match1 = this.matchRepo.create({
       tournamentId: savedTournament.tournamentId,
@@ -377,12 +443,24 @@ export class RoomsService {
     });
 
     const savedMatch1 = await this.matchRepo.save(match1);
-    await this.matchRepo.save(match2);
+    const savedMatch2 = await this.matchRepo.save(match2);
 
     room.status = RoomStatus.PLAYING;
     await this.roomRepo.save(room);
 
-    this.lobbyGateway.emitGameStarting(room.roomId, savedMatch1.matchId);
+    this.lobbyGateway.emitTournamentMatchStart(room.roomId, {
+      matchId: savedMatch1.matchId,
+      player1Id: shuffled[0].userId,
+      player2Id: shuffled[1].userId,
+      round: 1,
+    });
+
+    this.lobbyGateway.emitTournamentMatchStart(room.roomId, {
+      matchId: savedMatch2.matchId,
+      player1Id: shuffled[2].userId,
+      player2Id: shuffled[3].userId,
+      round: 1,
+    });
     this.lobbyGateway.emitRoomUpdated(room);
   }
 }
