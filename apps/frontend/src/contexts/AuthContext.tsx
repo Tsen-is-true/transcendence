@@ -9,6 +9,14 @@ interface User {
   createdAt: string;
 }
 
+interface AuthProfileResponse {
+  userid: number;
+  email: string;
+  nickname: string;
+  avatarUrl?: string | null;
+  createdAt: string;
+}
+
 interface AuthContextType {
   user: User | null;
   loading: boolean;
@@ -24,28 +32,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const mapProfileToUser = (data: AuthProfileResponse): User => ({
+    id: String(data.userid),
+    email: data.email,
+    username: data.nickname,
+    avatar: data.avatarUrl || '/logo.png',
+    createdAt: data.createdAt,
+  });
+
+  const fetchCurrentUser = async (): Promise<User | null> => {
+    const response = await apiFetch('/api/users/me');
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const result = await response.json();
+    return mapProfileToUser(result.data);
+  };
+
   // 로그인 상태 확인
-  const checkAuth = async () => {
+  const checkAuth = async (): Promise<User | null> => {
     try {
-      const response = await apiFetch('/api/users/me');
-
-      if (response.ok) {
-        const result = await response.json();
-        const data = result.data; // Unwrap `{ data: { ... } }`
-
-        setUser({
-          id: String(data.userid), // Backend is users.userid
-          email: data.email,
-          username: data.nickname, // Backend is nickname
-          avatar: data.avatarUrl || '/logo.png',
-          createdAt: data.createdAt
-        });
-      } else {
-        setUser(null);
-      }
+      const currentUser = await fetchCurrentUser();
+      setUser(currentUser);
+      return currentUser;
     } catch (error) {
       console.error('Auth check failed:', error);
       setUser(null);
+      return null;
     } finally {
       setLoading(false);
     }
