@@ -77,6 +77,13 @@ export function Login() {
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
+
+          <button
+            type="button"
+            className="w-full py-3 bg-transparent border border-gray-600 hover:border-cyan-400 hover:text-cyan-300 text-white font-semibold rounded-lg transition-colors"
+          >
+            Continue with 42
+          </button>
         </form>
 
         <div className="mt-6 text-center text-gray-400">
