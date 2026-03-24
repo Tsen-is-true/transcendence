@@ -283,7 +283,7 @@ function TournamentResultScreen({
 export function OnlineGame() {
   const { matchId } = useParams<{ matchId: string }>();
   const navigate = useNavigate();
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   
   const {
     isConnected,
@@ -384,17 +384,6 @@ export function OnlineGame() {
   const handleTouchEndUp = useCallback(() => movePaddle('stop'), [movePaddle]);
   const handleTouchStartDown = useCallback(() => movePaddle('down'), [movePaddle]);
   const handleTouchEndDown = useCallback(() => movePaddle('stop'), [movePaddle]);
-
-  useEffect(() => {
-    if (!loading && !user) {
-      alert('로그인이 필요합니다.');
-      navigate('/login');
-    }
-  }, [user, loading, navigate]);
-
-  if (loading) {
-    return <div className="text-white text-center mt-20">Loading...</div>;
-  }
 
   if (!user) return null;
 

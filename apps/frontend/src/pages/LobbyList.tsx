@@ -5,7 +5,7 @@ import { apiFetch } from '../api/client';
 import { useLobbySocket, Room } from '../hooks/useLobbySocket';
 
 export function LobbyList() {
-  const { user, loading: authLoading } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const { lastRoomUpdated } = useLobbySocket();
 
@@ -75,14 +75,7 @@ export function LobbyList() {
     }
   };
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      alert('로그인이 필요합니다.');
-      navigate('/login');
-    }
-  }, [user, authLoading, navigate]);
-
-  if (authLoading || loading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white">
         <p>Loading lobby...</p>

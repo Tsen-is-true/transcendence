@@ -1,13 +1,12 @@
-import { useState, FormEvent, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, FormEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { apiFetch } from '../api/client';
 
 const AVATAR_OPTIONS = ['👤', '🎮', '🎯', '🎪', '🎨', '🎭', '🎬', '🎤', '🎧', '🎸', '🎹', '🎺', '🎻', '🎲', '🎰', '🃏', '🎳', '🎮', '👾', '🕹️', '🦊', '🐼', '🐨', '🐯', '🦁', '🐸', '🐵', '🐶', '🐱', '🐭', '🐹', '🐰', '🦄', '🐲'];
 
 export function Settings() {
-  const { user, checkAuth, loading: authLoading } = useAuth();
-  const navigate = useNavigate();
+  const { user, checkAuth } = useAuth();
 
   const [username, setUsername] = useState(user?.username || '');
   const [avatar, setAvatar] = useState(user?.avatar || '👤');
@@ -18,21 +17,6 @@ export function Settings() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
-  useEffect(() => {
-    if (!authLoading && !user) {
-      alert('로그인이 필요합니다.');
-      navigate('/login');
-    }
-  }, [user, authLoading, navigate]);
-
-  if (authLoading) {
-    return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white">
-        <p>Loading profile...</p>
-      </div>
-    );
-  }
 
   if (!user) return null;
 

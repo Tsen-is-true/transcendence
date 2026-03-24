@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { apiFetch } from '../api/client';
 
@@ -30,8 +30,7 @@ interface SearchUser {
 }
 
 export function Friends() {
-  const { user, loading: authLoading } = useAuth();
-  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [friends, setFriends] = useState<Friend[]>([]);
   const [sentRequests, setSentRequests] = useState<FriendRequest[]>([]);
@@ -43,22 +42,6 @@ export function Friends() {
   const [searching, setSearching] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
-  // Redirect if not logged in
-  useEffect(() => {
-    if (!authLoading && !user) {
-      alert('로그인이 필요합니다.');
-      navigate('/login');
-    }
-  }, [user, authLoading, navigate]);
-
-  if (authLoading) {
-    return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white">
-        <p>Loading friends...</p>
-      </div>
-    );
-  }
 
   if (!user) return null;
 
@@ -101,7 +84,7 @@ export function Friends() {
           avatar: p.user.avatarUrl || '👤',
           friendshipId: String(p.friendshipId),
           status: p.status,
-          type: p.requesterId === Number(user?.id) ? 'sent' : 'received'
+          type: p.requesterId === Number(user.id) ? 'sent' : 'received'
         };
 
         if (item.type === 'sent') sent.push(item);

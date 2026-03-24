@@ -8,7 +8,7 @@ import { TournamentEndOverlay } from '../components/Game/TournamentEndOverlay';
 export function RoomView() {
   const { id } = useParams<{ id: string }>();
   const roomId = parseInt(id || '0', 10);
-  const { user, loading: authLoading } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const {
@@ -304,13 +304,6 @@ export function RoomView() {
     }
   }, [room]);
 
-  useEffect(() => {
-    if (!authLoading && !user) {
-      alert('로그인이 필요합니다.');
-      navigate('/login');
-    }
-  }, [user, authLoading, navigate]);
-
   const isMovingToGame = useRef(false);
 
   // Auto-rejoin if a match is waiting/playing for me and both players are present
@@ -335,7 +328,7 @@ export function RoomView() {
     }
   }, [room, user, bracket, startingMatchId, navigate]);
 
-  if (authLoading || loading) {
+  if (loading) {
     return <div className="text-white text-center mt-20">Loading...</div>;
   }
 
