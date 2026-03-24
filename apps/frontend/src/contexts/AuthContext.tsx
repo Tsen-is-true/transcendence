@@ -32,6 +32,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const resetAuthState = () => {
+    clearTokens();
+    setUser(null);
+  };
+
   const mapProfileToUser = (data: AuthProfileResponse): User => ({
     id: String(data.userid),
     email: data.email,
@@ -73,25 +78,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // 로그인
   const login = async (email: string, password: string) => {
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const result = await response.json();
+      const result = await response.json();
 
-    if (!response.ok) {
-      throw new Error(result.message || result.error || 'Login failed');
+      if (!response.ok) {
+        throw new Error(result.message || result.error || 'Login failed');
+      }
+
+      const data = result.data; // Unwrap `{ data: { accessToken, ... } }`
+      setTokens(data.accessToken, data.refreshToken);
+
+      const currentUser = await checkAuth();
+      if (!currentUser) {
+        throw new Error('Failed to load authenticated user');
+      }
+    } catch (error) {
+      resetAuthState();
+      throw error;
     }
-
-    const data = result.data; // Unwrap `{ data: { accessToken, ... } }`
-    setTokens(data.accessToken, data.refreshToken);
-    
-    // Now fetch profile
-    await checkAuth();
   };
 
   // 회원가입
@@ -119,10 +131,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await apiFetch('/api/auth/logout', { method: 'POST' });
     } catch (e) {
       console.error('Logout error', e);
+    } finally {
+      resetAuthState();
     }
-    clearTokens();
-    setUser(null);
-    window.location.href = '/login';
   };
 
   return (
