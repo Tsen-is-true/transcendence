@@ -17,13 +17,17 @@ interface AuthProfileResponse {
   createdAt: string;
 }
 
+interface CheckAuthOptions {
+  showLoader?: boolean;
+}
+
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  checkAuth: () => Promise<void>;
+  checkAuth: (options?: CheckAuthOptions) => Promise<User | null>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -57,7 +61,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   // 로그인 상태 확인
-  const checkAuth = async (): Promise<User | null> => {
+  const checkAuth = async (
+    options: CheckAuthOptions = {},
+  ): Promise<User | null> => {
+    const { showLoader = false } = options;
+
+    if (showLoader) {
+      setLoading(true);
+    }
+
     try {
       const currentUser = await fetchCurrentUser();
       setUser(currentUser);
@@ -67,13 +79,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       return null;
     } finally {
-      setLoading(false);
+      if (showLoader) {
+        setLoading(false);
+      }
     }
   };
 
   // 컴포넌트 마운트 시 로그인 상태 확인
   useEffect(() => {
-    checkAuth();
+    void checkAuth({ showLoader: true });
   }, []);
 
   // 로그인
