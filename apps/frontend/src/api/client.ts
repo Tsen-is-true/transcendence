@@ -30,7 +30,8 @@ export const apiFetch = async (url: string, init?: RequestInit): Promise<Respons
         body: JSON.stringify({ refreshToken: refresh })
       });
       if (refreshRes.ok) {
-        const data = await refreshRes.json();
+        const result = await refreshRes.json();
+        const data = result.data;
         setTokens(data.accessToken, data.refreshToken);
         headers.set('Authorization', `Bearer ${data.accessToken}`);
         response = await fetch(url, { ...init, headers });
