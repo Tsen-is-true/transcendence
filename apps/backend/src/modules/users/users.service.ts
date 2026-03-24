@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -220,5 +221,20 @@ export class UsersService {
       loses: u.loses,
       level: u.level,
     }));
+  }
+
+  async changePassword(userId: number, currentPassword: string, newPassword: string) {
+    const user = await this.userRepo.findOne({ where: { userid: userId } });
+    if (!user) throw new NotFoundException('유저를 찾을 수 없습니다');
+
+    if (!user.password) {
+      throw new BadRequestException('OAuth 가입 계정은 비밀번호를 변경할 수 없습니다');
+    }
+
+    const isValid = await bcrypt.compare(currentPassword, user.password);
+    if (!isValid) throw new BadRequestException('현재 비밀번호가 일치하지 않습니다');
+
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    await this.userRepo.update(userId, { password: hashedPassword });
   }
 }
