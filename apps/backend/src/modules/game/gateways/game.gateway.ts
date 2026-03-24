@@ -15,6 +15,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtPayload } from '@common/interfaces/jwt-payload.interface';
 import { Match, MatchStatus } from '../entities/match.entity';
+import { Score } from '../entities/score.entity';
 import { PongEngineService } from '../services/pong-engine.service';
 import { GameResultService } from '../services/game-result.service';
 import { UsersService } from '@modules/users/users.service';
@@ -48,10 +49,15 @@ export class GameGateway
 
   afterInit() {
     this.gameResultService.setOnFinalReadyCallback(
-      (roomId, matchId) => {
+      (roomId, matchId, player1Id, player2Id) => {
         setTimeout(() => {
-          this.lobbyGateway.emitGameStarting(roomId, matchId);
-        }, 10000);
+          this.lobbyGateway.emitGameStarting(
+            roomId,
+            matchId,
+            player1Id,
+            player2Id,
+          );
+        }, 2000);
       },
     );
 
@@ -69,6 +75,9 @@ export class GameGateway
             break;
           case 'end':
             this.lobbyGateway.emitTournamentEnd(roomId, data);
+            break;
+          case 'room:deleted':
+            this.lobbyGateway.emitRoomDeleted(data.roomId);
             break;
         }
       },
@@ -107,16 +116,31 @@ export class GameGateway
         const game = this.pongEngine.getGame(matchId);
         if (!game) return;
 
+        game.status = 'finished';
+        this.pongEngine.clearBroadcastLoop(matchId);
+
         this.server.to(`match:${matchId}`).emit('game:end', {
           winnerId,
+          roomId: game.roomId,
+          isTournament: game.isTournament,
           finalScore: {
             player1Score: game.players.player1.score,
             player2Score: game.players.player2.score,
           },
         });
 
-        await this.gameResultService.processGameEnd(game, winnerId);
-        this.pongEngine.removeGame(matchId);
+        try {
+          const match = await this.gameResultService.getMatch(matchId);
+          await this.gameResultService.processGameEnd(game, winnerId);
+          if (!game.isTournament) {
+            this.server.emit('room:deleted', { roomId: game.roomId });
+          }
+        } catch (err: any) {
+          this.logger.error(`Normal Game End process failed: ${err.message}`);
+        }
+        
+        // Postpone removal to cache state against concurrency reloads
+        setTimeout(() => this.pongEngine.removeGame(matchId), 10000);
       },
     });
   }
@@ -148,10 +172,10 @@ export class GameGateway
 
     this.userSocket.delete(userId);
 
-    const game = this.pongEngine.findGameByUserId(userId);
+    const game = this.pongEngine.findGameBySocketId(client.id);
     if (!game || game.status === 'finished') return;
 
-    const playerNum = this.getPlayerNum(game, userId);
+    const playerNum = game.players.player1.socketId === client.id ? 1 : 2;
     if (!playerNum) return;
 
     const player =
@@ -159,24 +183,12 @@ export class GameGateway
     player.connected = false;
     player.socketId = null;
 
-    this.pongEngine.pauseGame(game.matchId);
+    const winnerId =
+      playerNum === 1
+        ? game.players.player2.userId
+        : game.players.player1.userId;
 
-    this.server.to(`match:${game.matchId}`).emit('game:pause', {
-      reason: 'opponent_disconnected',
-      disconnectedUserId: userId,
-      timeout: GAME_CONFIG.RECONNECT_TIMEOUT,
-    });
-
-    const timer = setTimeout(() => {
-      this.disconnectTimers.delete(game.matchId);
-      const winnerId =
-        playerNum === 1
-          ? game.players.player2.userId
-          : game.players.player1.userId;
-      this.handleWalkover(game.matchId, winnerId);
-    }, GAME_CONFIG.RECONNECT_TIMEOUT);
-
-    this.disconnectTimers.set(game.matchId, timer);
+    this.handleWalkover(game.matchId, winnerId);
   }
 
   @SubscribeMessage('game:join')
@@ -184,7 +196,21 @@ export class GameGateway
     @ConnectedSocket() client: Socket,
     @MessageBody() data: { matchId: number },
   ) {
-    const userId = this.socketUser.get(client.id);
+    let userId = this.socketUser.get(client.id);
+    if (!userId) {
+      const token = client.handshake.auth?.token;
+      if (token) {
+        try {
+          const user = await this.jwtService.verifyAsync(token);
+          const verifiedUserId = Number(user.id);
+          this.socketUser.set(client.id, verifiedUserId);
+          this.userSocket.set(verifiedUserId, client.id);
+          userId = verifiedUserId;
+        } catch (err) {
+          return;
+        }
+      }
+    }
     if (!userId) return;
 
     // Check for reconnection to a paused game
@@ -202,20 +228,53 @@ export class GameGateway
       match.status !== MatchStatus.WAITING &&
       match.status !== MatchStatus.PLAYING
     ) {
+      if ([MatchStatus.FINISHED, MatchStatus.WALKOVER, MatchStatus.SURRENDER].includes(match.status)) {
+        const score = await this.matchRepo.manager.getRepository(Score).findOne({ where: { matchId: data.matchId } });
+        client.emit('game:end', {
+          winnerId: match.winnerId,
+          roomId: match.roomId,
+          reason: match.status === MatchStatus.WALKOVER ? 'walkover' : 'finished',
+          isTournament: !!match.tournamentId,
+          round: match.round,
+          finalScore: {
+            player1Score: score?.player1Score || 0,
+            player2Score: score?.player2Score || 0,
+          }
+        });
+      }
       return;
     }
-    if (match.player1Id !== userId && match.player2Id !== userId) return;
+    if (match.player1Id !== userId && match.player2Id !== userId) {
+      client.emit('game:error', { message: 'Not a match participant' });
+      return;
+    }
 
     const playerNum = match.player1Id === userId ? 1 : 2;
     client.join(`match:${data.matchId}`);
+    client.emit('game:role', { playerNumber: playerNum });
 
     let game = this.pongEngine.getGame(data.matchId);
+    if (game && game.status === 'finished') {
+      client.emit('game:end', {
+        winnerId: match.winnerId || 0,
+        roomId: game.roomId,
+        reason: 'finished',
+        isTournament: game.isTournament,
+        finalScore: {
+          player1Score: game.players.player1.score,
+          player2Score: game.players.player2.score,
+        },
+      });
+      return;
+    }
+
     if (!game) {
       game = this.pongEngine.createGame(
         data.matchId,
         match.roomId,
         match.player1Id!,
         match.player2Id!,
+        !!match.tournamentId,
       );
     }
 
@@ -229,6 +288,7 @@ export class GameGateway
       game.players.player2.connected &&
       game.status === 'countdown'
     ) {
+      game.status = 'starting';
       await this.startCountdown(data.matchId, match);
     }
   }
@@ -261,6 +321,53 @@ export class GameGateway
     });
   }
 
+  @SubscribeMessage('game:surrender')
+  async handleSurrender(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: { matchId: number },
+  ) {
+    const userId = this.socketUser.get(client.id);
+    if (!userId) return;
+
+    const game = this.pongEngine.getGame(data.matchId);
+    if (!game || game.status === 'finished') return;
+
+    const playerNum = this.getPlayerNum(game, userId);
+    if (!playerNum) return;
+
+    const winnerId =
+      playerNum === 1
+        ? game.players.player2.userId
+        : game.players.player1.userId;
+
+    game.status = 'finished';
+
+    const match = await this.gameResultService.getMatch(data.matchId);
+
+    this.server.to(`match:${data.matchId}`).emit('game:end', {
+      winnerId,
+      roomId: game.roomId,
+      reason: 'surrender',
+      isTournament: !!match?.tournamentId,
+      round: match?.round,
+      finalScore: {
+        player1Score: game.players.player1.score,
+        player2Score: game.players.player2.score,
+      },
+    });
+
+    try {
+      await this.gameResultService.processGameEnd(
+        game,
+        winnerId,
+        MatchStatus.SURRENDER,
+      );
+    } catch (err: any) {
+      this.logger.error(`Surrender processGameEnd failed: ${err.message}`, err.stack);
+    }
+    this.pongEngine.removeGame(data.matchId);
+  }
+
   private async startCountdown(matchId: number, match: Match) {
     await this.matchRepo.update(matchId, {
       status: MatchStatus.PLAYING,
@@ -271,24 +378,27 @@ export class GameGateway
     await this.usersService.update(match.player2Id!, { isPlaying: true });
 
     for (let i = GAME_CONFIG.COUNTDOWN_SECONDS; i > 0; i--) {
+      const game = this.pongEngine.getGame(matchId);
+      if (!game || game.status === 'finished') break;
+
       this.server
         .to(`match:${matchId}`)
         .emit('game:countdown', { seconds: i });
       await this.delay(1000);
     }
 
+    const game = this.pongEngine.getGame(matchId);
+    if (!game || game.status === 'finished') return;
+
     this.server.to(`match:${matchId}`).emit('game:start', { matchId });
 
-    const game = this.pongEngine.getGame(matchId);
-    if (game) {
-      game.status = 'playing';
-      game.lastUpdateAt = Date.now();
+    game.status = 'playing';
+    game.lastUpdateAt = Date.now();
 
-      this.pongEngine.startGameLoop(matchId);
-      this.pongEngine.startBroadcastLoop(matchId, (mid, state) => {
-        this.server.to(`match:${mid}`).emit('game:state', state);
-      });
-    }
+    this.pongEngine.startGameLoop(matchId);
+    this.pongEngine.startBroadcastLoop(matchId, (mid, state) => {
+      this.server.to(`match:${mid}`).emit('game:state', state);
+    });
   }
 
   private async handleReconnection(
@@ -336,27 +446,48 @@ export class GameGateway
     if (!game) return;
 
     game.status = 'finished';
+    this.pongEngine.clearBroadcastLoop(matchId);
 
-    this.server.to(`match:${matchId}`).emit('game:end', {
+    const payload = {
       winnerId,
+      roomId: game.roomId,
       reason: 'walkover',
+      isTournament: game.isTournament, 
       finalScore: {
         player1Score: game.players.player1.score,
         player2Score: game.players.player2.score,
       },
-    });
+    };
 
-    await this.gameResultService.processGameEnd(
-      game,
-      winnerId,
-      MatchStatus.WALKOVER,
-    );
-    this.pongEngine.removeGame(matchId);
+    this.server.to(`match:${matchId}`).emit('game:end', payload);
+
+    const opponentSocketId = this.userSocket.get(winnerId);
+    if (opponentSocketId) {
+      this.server.to(opponentSocketId).emit('game:end', payload);
+    }
+
+    try {
+      const match = await this.gameResultService.getMatch(matchId);
+      await this.gameResultService.processGameEnd(
+        game,
+        winnerId,
+        MatchStatus.WALKOVER,
+      );
+
+      if (!game.isTournament) {
+        this.server.emit('room:deleted', { roomId: game.roomId });
+      }
+    } catch (err: any) {
+      this.logger.error(`Walkover process failed: ${err.message}`, err.stack);
+    }
+    
+    // Postpone removal to cache state against concurrency reloads
+    setTimeout(() => this.pongEngine.removeGame(matchId), 10000);
   }
 
   getPlayerNum(game: any, userId: number): 1 | 2 | null {
-    if (game.players.player1.userId === userId) return 1;
-    if (game.players.player2.userId === userId) return 2;
+    if (Number(game.players.player1.userId) === Number(userId)) return 1;
+    if (Number(game.players.player2.userId) === Number(userId)) return 2;
     return null;
   }
 
