@@ -83,6 +83,19 @@ export function Login() {
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
+
+          <div className="relative flex items-center justify-center my-4">
+            <div className="border-t border-gray-600 w-full"></div>
+            <span className="bg-gray-800 px-3 text-gray-400 text-sm absolute">Or</span>
+          </div>
+
+          <a 
+            href="/api/auth/42"
+            className="w-full flex items-center justify-center gap-2 py-3 bg-[#00BABC] hover:bg-[#009A9C] text-white font-bold rounded-lg transition-colors mt-2 shadow-lg hover:shadow-[#00BABC]/30"
+          >
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/8d/42_Logo.svg" alt="42" className="w-5 h-5 invert" />
+            Sign in with 42
+          </a>
         </form>
 
         <div className="mt-6 text-center text-gray-400">
