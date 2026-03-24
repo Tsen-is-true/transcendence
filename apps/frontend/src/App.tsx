@@ -1,15 +1,29 @@
 import { Routes, Route } from 'react-router-dom';
 import { Home, GamePage, OnlineGame, Login, Register, Profile, Settings, Leaderboard, Friends, PrivacyPolicy, TermsOfService, NotFound, LobbyList, RoomView } from './pages';
 import { AuthProvider } from './contexts/AuthContext';
-import { ProtectedRoute } from './routes/AuthGuards';
+import { GuestRoute, ProtectedRoute } from './routes/AuthGuards';
 
 function App() {
   return (
     <AuthProvider>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/login"
+          element={(
+            <GuestRoute>
+              <Login />
+            </GuestRoute>
+          )}
+        />
+        <Route
+          path="/register"
+          element={(
+            <GuestRoute>
+              <Register />
+            </GuestRoute>
+          )}
+        />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route
