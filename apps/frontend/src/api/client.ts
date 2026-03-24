@@ -20,18 +20,28 @@ const setAuthorizationHeader = (headers: Headers, token: string | null) => {
 };
 
 const refreshAuthTokens = async (refreshToken: string) => {
-  const refreshRes = await fetch('/api/auth/refresh', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ refreshToken }),
-  });
+  try {
+    const refreshRes = await fetch('/api/auth/refresh', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refreshToken }),
+    });
 
-  if (!refreshRes.ok) {
+    if (!refreshRes.ok) {
+      return null;
+    }
+
+    const result = await refreshRes.json();
+    const data = result?.data;
+
+    if (!data?.accessToken || !data?.refreshToken) {
+      return null;
+    }
+
+    return data;
+  } catch {
     return null;
   }
-
-  const result = await refreshRes.json();
-  return result.data;
 };
 
 export const apiFetch = async (url: string, init?: RequestInit): Promise<Response> => {
@@ -50,6 +60,9 @@ export const apiFetch = async (url: string, init?: RequestInit): Promise<Respons
         setTokens(data.accessToken, data.refreshToken);
         setAuthorizationHeader(headers, data.accessToken);
         response = await fetch(url, { ...init, headers });
+        if (response.status === 401) {
+          clearTokens();
+        }
       } else {
         clearTokens();
       }
