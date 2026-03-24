@@ -1,4 +1,5 @@
 export const getAccessToken = () => sessionStorage.getItem('accessToken');
+export const getRefreshToken = () => sessionStorage.getItem('refreshToken');
 
 export const setTokens = (access: string, refresh: string) => {
   sessionStorage.setItem('accessToken', access);
@@ -10,30 +11,44 @@ export const clearTokens = () => {
   sessionStorage.removeItem('refreshToken');
 };
 
-export const apiFetch = async (url: string, init?: RequestInit): Promise<Response> => {
-  const token = getAccessToken();
-  const headers = new Headers(init?.headers);
+const setAuthorizationHeader = (headers: Headers, token: string | null) => {
   if (token) {
     headers.set('Authorization', `Bearer ${token}`);
+  } else {
+    headers.delete('Authorization');
   }
+};
+
+const refreshAuthTokens = async (refreshToken: string) => {
+  const refreshRes = await fetch('/api/auth/refresh', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ refreshToken }),
+  });
+
+  if (!refreshRes.ok) {
+    return null;
+  }
+
+  const result = await refreshRes.json();
+  return result.data;
+};
+
+export const apiFetch = async (url: string, init?: RequestInit): Promise<Response> => {
+  const headers = new Headers(init?.headers);
+  setAuthorizationHeader(headers, getAccessToken());
   const config = { ...init, headers };
   
   let response = await fetch(url, config);
   
   // Handle Token Expiry
   if (response.status === 401) {
-    const refresh = sessionStorage.getItem('refreshToken');
+    const refresh = getRefreshToken();
     if (refresh) {
-      const refreshRes = await fetch('/api/auth/refresh', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refreshToken: refresh })
-      });
-      if (refreshRes.ok) {
-        const result = await refreshRes.json();
-        const data = result.data;
+      const data = await refreshAuthTokens(refresh);
+      if (data) {
         setTokens(data.accessToken, data.refreshToken);
-        headers.set('Authorization', `Bearer ${data.accessToken}`);
+        setAuthorizationHeader(headers, data.accessToken);
         response = await fetch(url, { ...init, headers });
       } else {
         clearTokens();
