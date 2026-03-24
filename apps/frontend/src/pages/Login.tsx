@@ -7,6 +7,7 @@ export function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [oauthLoading, setOauthLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -23,6 +24,12 @@ export function Login() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleOauthLogin = () => {
+    setError('');
+    setOauthLoading(true);
+    window.location.assign('/api/auth/42');
   };
 
   return (
@@ -80,9 +87,11 @@ export function Login() {
 
           <button
             type="button"
-            className="w-full py-3 bg-transparent border border-gray-600 hover:border-cyan-400 hover:text-cyan-300 text-white font-semibold rounded-lg transition-colors"
+            onClick={handleOauthLogin}
+            disabled={loading || oauthLoading}
+            className="w-full py-3 bg-transparent border border-gray-600 hover:border-cyan-400 hover:text-cyan-300 disabled:border-gray-700 disabled:text-gray-500 text-white font-semibold rounded-lg transition-colors"
           >
-            Continue with 42
+            {oauthLoading ? 'Redirecting to 42...' : 'Continue with 42'}
           </button>
         </form>
 
