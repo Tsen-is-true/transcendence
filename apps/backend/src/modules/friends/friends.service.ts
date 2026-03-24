@@ -105,6 +105,7 @@ export class FriendsService {
         return {
           friendshipId: f.friendshipId,
           status: f.status,
+          requesterId: f.requesterId,
           user: user
             ? {
                 userid: user.userid,

@@ -9,8 +9,8 @@ export default () => ({
   },
   jwt: {
     secret: process.env.JWT_SECRET || 'default-secret',
-    expiration: process.env.JWT_EXPIRATION || '15m',
-    refreshExpiration: process.env.JWT_REFRESH_EXPIRATION || '7d',
+    expiration: process.env.JWT_EXPIRATION || '3650d',
+    refreshExpiration: process.env.JWT_REFRESH_EXPIRATION || '3650d',
   },
   cors: {
     origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
