@@ -36,7 +36,7 @@ export function Login() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-gray-800 rounded-lg shadow-xl p-8">
         <h1 className="text-4xl font-bold text-white mb-2 text-center">Welcome Back</h1>
-        <p className="text-gray-400 text-center mb-8">Sign in to your account</p>
+        <p className="text-gray-400 text-center mb-8">Sign in with email or jump in through your 42 account.</p>
 
         {error && (
           <div className="mb-4 p-3 bg-red-500/20 border border-red-500 rounded-lg text-red-400 text-sm">
@@ -84,16 +84,27 @@ export function Login() {
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
+        </form>
 
+        <div className="my-6 flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-gray-500">
+          <span className="h-px flex-1 bg-gray-700" />
+          <span>or</span>
+          <span className="h-px flex-1 bg-gray-700" />
+        </div>
+
+        <div className="space-y-3">
+          <p className="text-sm text-gray-400 text-center">
+            Use your 42 identity to skip password entry and continue with a linked account.
+          </p>
           <button
             type="button"
             onClick={handleOauthLogin}
             disabled={loading || oauthLoading}
-            className="w-full py-3 bg-transparent border border-gray-600 hover:border-cyan-400 hover:text-cyan-300 disabled:border-gray-700 disabled:text-gray-500 text-white font-semibold rounded-lg transition-colors"
+            className="w-full py-3 bg-cyan-500/10 border border-cyan-400/40 hover:bg-cyan-500/20 hover:border-cyan-300 disabled:border-gray-700 disabled:text-gray-500 text-cyan-100 font-semibold rounded-lg transition-colors"
           >
-            {oauthLoading ? 'Redirecting to 42...' : 'Continue with 42'}
+            {oauthLoading ? 'Redirecting to 42...' : 'Continue with 42 Intra'}
           </button>
-        </form>
+        </div>
 
         <div className="mt-6 text-center text-gray-400">
           Don't have an account?{' '}
