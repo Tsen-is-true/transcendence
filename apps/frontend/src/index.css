@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: radial-gradient(circle at 50% 50%, #0a1235 0%, #03040c 100%) fixed !important;
+  color: #e2e8f0;
+}
+
+canvas {
+  display: block;
+}
+
+/* Xerath Arcane Glow theme */
+.xerath-glow {
+  box-shadow: 0 0 15px rgba(0, 242, 255, 0.4), inset 0 0 10px rgba(0, 242, 255, 0.1);
+  border: 1px solid rgba(0, 242, 255, 0.4) !important;
+  backdrop-filter: blur(8px);
+}
+
+.xerath-text {
+  color: #00f2ff;
+  text-shadow: 0 0 12px rgba(0, 242, 255, 0.5);
+}
+
+.xerath-gold {
+  color: #ffaa00;
+  text-shadow: 0 0 8px rgba(255, 170, 0, 0.4);
+}
+
+.xerath-button {
+  background: rgba(0, 242, 255, 0.05);
+  border: 1px solid rgba(0, 242, 255, 0.4);
+  color: #00f2ff;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+.xerath-button:hover {
+  background: rgba(0, 242, 255, 0.2);
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.6);
+  border-color: #00f2ff;
+  transform: translateY(-1px);
+}
+
+/* === Global Theme Overrides === */
+
+/* Cards and Panels */
+.bg-gray-800, .bg-gray-800\/50, .bg-gray-800\/80, .bg-gray-900\/50 {
+  background: rgba(6, 11, 30, 0.7) !important;
+  border: 1px solid rgba(0, 242, 255, 0.3) !important;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6), inset 0 0 12px rgba(0, 242, 255, 0.08) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+/* Background Gradients */
+.from-gray-900 {
+  --tw-gradient-from: #03040b !important;
+}
+.via-purple-900, .via-indigo-900, .via-blue-900 {
+  --tw-gradient-via: #070e2b !important;
+}
+.to-gray-900 {
+  --tw-gradient-to: #020308 !important;
+}
+
+/* Primary and Navigation Buttons */
+.bg-purple-600, .bg-indigo-600, .bg-blue-600, .bg-green-600, .bg-teal-600, .bg-gray-600 {
+  background: rgba(0, 242, 255, 0.08) !important;
+  border: 1px solid rgba(0, 242, 255, 0.4) !important;
+  color: #00f2ff !important;
+  transition: all 0.25s ease !important;
+}
+
+.bg-purple-600:hover, .bg-indigo-600:hover, .bg-blue-600:hover, .bg-green-600:hover, .bg-teal-600:hover, .bg-gray-600:hover {
+  background: rgba(0, 242, 255, 0.25) !important;
+  box-shadow: 0 0 15px rgba(0, 242, 255, 0.5) !important;
+  border-color: rgba(0, 242, 255, 0.8) !important;
+  transform: translateY(-1px);
+}
+
+/* Red / Danger Buttons (Glow Variant) */
+.bg-red-600 {
+  background: rgba(255, 0, 0, 0.08) !important;
+  border: 1px solid rgba(255, 68, 68, 0.4) !important;
+  color: #ff6666 !important;
+}
+.bg-red-600:hover {
+  background: rgba(255, 0, 0, 0.2) !important;
+  box-shadow: 0 0 15px rgba(255, 68, 68, 0.5) !important;
+  border-color: rgba(255, 68, 68, 0.8) !important;
+}
+
+/* Yellow / Caution Buttons (Glow Variant) */
+.bg-yellow-600 {
+  background: rgba(255, 170, 0, 0.08) !important;
+  border: 1px solid rgba(255, 170, 0, 0.4) !important;
+  color: #ffcc00 !important;
+}
+.bg-yellow-600:hover {
+  background: rgba(255, 170, 0, 0.2) !important;
+  box-shadow: 0 0 15px rgba(255, 170, 0, 0.5) !important;
+  border-color: rgba(255, 170, 0, 0.8) !important;
+}
+
+/* Headers / Specific Highlight Texts */
+h1, .text-3xl, .text-4xl, .text-5xl {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+}
+
+/* Force Top Page Wrappers transparent to show the Body Radial Gradient */
+.min-h-screen {
+  background: transparent !important;
+}
