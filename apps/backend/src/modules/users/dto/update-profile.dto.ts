@@ -17,4 +17,9 @@ export class UpdateProfileDto {
     message: 'nickname must contain only alphanumeric characters or Korean',
   })
   nickname?: string;
+
+  @ApiPropertyOptional({ example: '👤' })
+  @IsOptional()
+  @IsString()
+  avatarUrl?: string;
 }

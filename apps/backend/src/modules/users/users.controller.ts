@@ -30,6 +30,7 @@ import { UsersService } from './users.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { SearchUsersDto } from './dto/search-users.dto';
 import { MatchHistoryDto } from './dto/match-history.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 
 const AVATAR_DIR = path.join(process.cwd(), 'uploads', 'avatars');
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -67,6 +68,16 @@ export class UsersController {
 
     await this.usersService.update(userId, dto);
     return this.usersService.getProfile(userId);
+  }
+
+  @Patch('me/password')
+  @ApiOperation({ summary: '내 비밀번호 변경' })
+  async updateMyPassword(
+    @CurrentUser('sub') userId: number,
+    @Body() dto: ChangePasswordDto,
+  ) {
+    await this.usersService.changePassword(userId, dto.currentPassword, dto.newPassword);
+    return { message: '비밀번호가 변경되었습니다' };
   }
 
   @Post('me/avatar')
