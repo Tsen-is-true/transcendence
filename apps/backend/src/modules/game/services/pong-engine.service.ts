@@ -31,10 +31,12 @@ export class PongEngineService {
     roomId: number,
     player1Id: number,
     player2Id: number,
+    isTournament: boolean,
   ): GameState {
     const game: GameState = {
       matchId,
       roomId,
+      isTournament,
       status: 'countdown',
       ball: this.createInitialBall(),
       players: {
@@ -79,6 +81,18 @@ export class PongEngineService {
       if (
         game.players.player1.userId === userId ||
         game.players.player2.userId === userId
+      ) {
+        return game;
+      }
+    }
+    return undefined;
+  }
+
+  findGameBySocketId(socketId: string): GameState | undefined {
+    for (const game of this.games.values()) {
+      if (
+        game.players.player1.socketId === socketId ||
+        game.players.player2.socketId === socketId
       ) {
         return game;
       }
@@ -311,7 +325,7 @@ export class PongEngineService {
     };
   }
 
-  private clearGameLoop(matchId: number): void {
+  public clearGameLoop(matchId: number): void {
     const interval = this.gameLoops.get(matchId);
     if (interval) {
       clearInterval(interval);
@@ -319,7 +333,7 @@ export class PongEngineService {
     }
   }
 
-  private clearBroadcastLoop(matchId: number): void {
+  public clearBroadcastLoop(matchId: number): void {
     const interval = this.broadcastLoops.get(matchId);
     if (interval) {
       clearInterval(interval);
