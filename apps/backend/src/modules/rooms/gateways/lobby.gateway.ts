@@ -50,11 +50,17 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('room:join')
-  handleRoomJoin(
+  async handleRoomJoin(
     @ConnectedSocket() client: Socket,
     @MessageBody() data: { roomId: number },
   ) {
-    client.join(`room:${data.roomId}`);
+    const userId = this.getUserIdFromSocket(client);
+    if (!userId) return;
+
+    const isMember = await this.roomsService.isMember(data.roomId, userId);
+    if (isMember) {
+      client.join(`room:${data.roomId}`);
+    }
   }
 
   @SubscribeMessage('room:leave')
@@ -105,12 +111,21 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.server.to(`room:${roomId}`).emit('room:member:left', { roomId, userId });
   }
 
+  emitMemberKicked(roomId: number, userId: number) {
+    this.server.to(`room:${roomId}`).emit('room:kicked', { roomId, userId });
+  }
+
   emitMemberReady(roomId: number, userId: number, isReady: boolean) {
     this.server.to(`room:${roomId}`).emit('room:member:ready', { roomId, userId, isReady });
   }
 
-  emitGameStarting(roomId: number, matchId: number) {
-    this.server.to(`room:${roomId}`).emit('room:game:starting', { roomId, matchId });
+  emitGameStarting(roomId: number, matchId: number, player1Id?: number, player2Id?: number) {
+    this.server.to(`room:${roomId}`).emit('room:game:starting', { 
+      roomId, 
+      matchId,
+      player1Id,
+      player2Id
+    });
   }
 
   emitTournamentUpdate(roomId: number, data: any) {
