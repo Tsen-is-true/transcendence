@@ -1,0 +1,19 @@
+services:
+  dev_db:
+    image: mariadb:11
+    environment:
+      - MARIADB_ROOT_PASSWORD=change_me
+      - MARIADB_DATABASE=trans
+      - MARIADB_USER=trans
+      - MARIADB_PASSWORD=change_me
+    ports:
+      - "3307:3306"
+    volumes:
+      - dev_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  dev_db_data:
