@@ -5,6 +5,7 @@ export enum MatchStatus {
   PLAYING = 'playing',
   FINISHED = 'finished',
   WALKOVER = 'walkover',
+  SURRENDER = 'surrender',
 }
 
 @Entity('matchs')

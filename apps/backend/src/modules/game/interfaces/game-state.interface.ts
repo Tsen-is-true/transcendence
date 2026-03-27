@@ -1,5 +1,5 @@
 export type PaddleDirection = 'up' | 'down' | 'stop';
-export type GameStatus = 'countdown' | 'playing' | 'paused' | 'finished';
+export type GameStatus = 'countdown' | 'starting' | 'playing' | 'paused' | 'finished';
 
 export interface PlayerState {
   userId: number;
@@ -22,6 +22,7 @@ export interface GameState {
   matchId: number;
   roomId: number;
   status: GameStatus;
+  isTournament: boolean;
   ball: BallState;
   players: {
     player1: PlayerState;
