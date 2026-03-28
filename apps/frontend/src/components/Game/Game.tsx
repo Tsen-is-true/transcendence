@@ -1,4 +1,5 @@
 import { useRef, useCallback, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useGameLoop } from '../../hooks/useGameLoop';
 import { useKeyboard } from '../../hooks/useKeyboard';
 import { LocalGameCanvas } from './LocalGameCanvas';
@@ -80,9 +81,15 @@ export function Game() {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center p-4 sm:p-8">
       <div className="flex flex-col items-center gap-4 sm:gap-8 w-full max-w-7xl">
         {/* Title and Settings Button */}
-        <div className="flex items-center gap-4">
-          <div className="flex items-center">
-            <img src="/logo.png" className="h-16 sm:h-20 w-auto" alt="Xerath" />
+        <div className="flex items-center gap-4 w-full justify-between">
+          <div className="flex items-center gap-4">
+            <Link
+              to="/"
+              className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors border border-gray-700 flex items-center gap-2"
+            >
+              <span>←</span> Home
+            </Link>
+            <img src="/logo.png" className="h-16 sm:h-20 w-auto hidden sm:block" alt="Xerath" />
           </div>
           <button
             onClick={() => setShowSettings(true)}

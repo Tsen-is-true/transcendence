@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import { Home, GamePage, OnlineGame, Login, Register, Profile, Settings, Leaderboard, Friends, PrivacyPolicy, TermsOfService, NotFound, LobbyList, RoomView } from './pages';
+import { Home, GamePage, OnlineGame, Login, Register, Profile, Settings, Leaderboard, Friends, PrivacyPolicy, TermsOfService, NotFound, LobbyList, RoomView, ForgotPassword, AuthCallback } from './pages';
 import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
@@ -8,7 +8,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
