@@ -12,3 +12,5 @@ export * from './TermsOfService';
 export * from './NotFound';
 export * from './LobbyList';
 export * from './RoomView';
+export * from './ForgotPassword';
+export * from './AuthCallback';

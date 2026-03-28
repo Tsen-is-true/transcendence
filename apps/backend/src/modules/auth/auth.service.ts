@@ -9,6 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { UsersService } from '@modules/users/users.service';
 import { User } from '@modules/users/entities/user.entity';
 import { RegisterDto } from './dto/register.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -91,6 +92,20 @@ export class AuthService {
         avatarUrl: user.avatarUrl,
       },
     };
+  }
+
+  async resetPassword(dto: ResetPasswordDto) {
+    const user = await this.usersService.findByEmail(dto.email);
+    if (!user) {
+      throw new ConflictException('해당 이메일로 가입된 계정이 없습니다');
+    }
+    if (user.oauthProvider) {
+      throw new ConflictException('OAuth로 가입된 계정은 비밀번호를 변경할 수 없습니다');
+    }
+
+    const hashedPassword = await bcrypt.hash(dto.newPassword, 12);
+    await this.usersService.update(user.userid, { password: hashedPassword });
+    return { message: '비밀번호가 성공적으로 변경되었습니다' };
   }
 
   async refreshTokens(refreshToken: string) {
