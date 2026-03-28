@@ -30,8 +30,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    ports:
-      - "3001:3001"
+    expose:
+      - "3001"
     restart: unless-stopped
 
   frontend:
@@ -40,8 +40,23 @@ services:
       - .env
     depends_on:
       - backend
+    expose:
+      - "3000"
+
+  nginx:
+    image: nginx:alpine
     ports:
-      - "3000:3000"
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./infra/nginx/init-certs.sh:/docker-entrypoint.d/init-certs.sh:ro
+      - nginx_certs:/etc/nginx/certs
+    entrypoint: ["sh", "/docker-entrypoint.d/init-certs.sh"]
+    depends_on:
+      - frontend
+      - backend
+    restart: unless-stopped
 
   prometheus:
     image: prom/prometheus:latest
@@ -71,3 +86,4 @@ services:
 volumes:
   db_data:
   grafana_data:
+  nginx_certs:
