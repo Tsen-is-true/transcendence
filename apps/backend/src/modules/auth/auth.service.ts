@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '@modules/users/users.service';
 import { User } from '@modules/users/entities/user.entity';
+import { MetricsService } from '@modules/monitoring/metrics.service';
 import { RegisterDto } from './dto/register.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 
@@ -17,6 +18,7 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly metricsService: MetricsService,
   ) {}
 
   async register(dto: RegisterDto) {
@@ -40,6 +42,8 @@ export class AuthService {
       nickname: dto.nickname,
     });
 
+    this.metricsService.incRegistrations();
+
     return {
       userid: user.userid,
       email: user.email,
@@ -50,10 +54,12 @@ export class AuthService {
   async validateUser(email: string, password: string) {
     const user = await this.usersService.findByEmail(email);
     if (!user) {
+      this.metricsService.incLogins('failure');
       throw new UnauthorizedException('이메일 또는 비밀번호가 올바르지 않습니다');
     }
 
     if (!user.password) {
+      this.metricsService.incLogins('failure');
       throw new UnauthorizedException(
         'OAuth로 가입된 계정입니다. OAuth 로그인을 이용해주세요',
       );
@@ -61,6 +67,7 @@ export class AuthService {
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
+      this.metricsService.incLogins('failure');
       throw new UnauthorizedException('이메일 또는 비밀번호가 올바르지 않습니다');
     }
 
@@ -81,6 +88,8 @@ export class AuthService {
 
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
     await this.usersService.update(user.userid, { hashedRefreshToken });
+
+    this.metricsService.incLogins('success');
 
     return {
       accessToken,

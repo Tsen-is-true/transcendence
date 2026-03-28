@@ -6,10 +6,14 @@ import {
 } from '@nestjs/common';
 import { createHash } from 'crypto';
 import { ApiKeysService } from '@modules/api-keys/api-keys.service';
+import { MetricsService } from '@modules/monitoring/metrics.service';
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
-  constructor(private readonly apiKeysService: ApiKeysService) {}
+  constructor(
+    private readonly apiKeysService: ApiKeysService,
+    private readonly metricsService: MetricsService,
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -31,6 +35,7 @@ export class ApiKeyGuard implements CanActivate {
     }
 
     this.apiKeysService.updateLastUsed(apiKey.apiKeyId);
+    this.metricsService.incApiKeyRequests();
 
     request.apiKeyUser = { userId: apiKey.userId };
 

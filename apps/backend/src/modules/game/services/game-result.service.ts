@@ -11,6 +11,7 @@ import {
   ParticipantStatus,
 } from '@modules/tournaments/entities/tournament-participant.entity';
 import { UsersService } from '@modules/users/users.service';
+import { MetricsService } from '@modules/monitoring/metrics.service';
 import { GameState } from '../interfaces/game-state.interface';
 
 const ELO_K_FACTOR = 32;
@@ -67,6 +68,7 @@ export class GameResultService {
     @InjectRepository(TournamentParticipant)
     private readonly participantRepo: Repository<TournamentParticipant>,
     private readonly usersService: UsersService,
+    private readonly metricsService: MetricsService,
     private readonly dataSource: DataSource,
   ) {}
 
@@ -369,6 +371,8 @@ export class GameResultService {
             isFinish: true,
             winnerId: firstId,
           });
+          const activeCount = await this.tournamentRepo.count({ where: { isFinish: false } });
+          this.metricsService.setActiveTournaments(activeCount);
 
           if (firstId) {
             await participantRepo.update(

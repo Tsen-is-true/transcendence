@@ -136,6 +136,10 @@ export class PongEngineService {
     this.games.delete(matchId);
   }
 
+  getActiveGameCount(): number {
+    return this.games.size;
+  }
+
   getMinimizedState(game: GameState): MinimizedGameState {
     return {
       b: { x: game.ball.x, y: game.ball.y },

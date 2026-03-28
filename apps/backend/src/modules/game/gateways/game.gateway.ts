@@ -21,6 +21,7 @@ import { GameResultService } from '../services/game-result.service';
 import { UsersService } from '@modules/users/users.service';
 import { LobbyGateway } from '@modules/rooms/gateways/lobby.gateway';
 import { AchievementsService } from '@modules/achievements/achievements.service';
+import { MetricsService } from '@modules/monitoring/metrics.service';
 import { GAME_CONFIG } from '../constants/game.constants';
 
 @WebSocketGateway({ namespace: '/game', cors: true })
@@ -43,6 +44,7 @@ export class GameGateway
     @Inject(forwardRef(() => LobbyGateway))
     private readonly lobbyGateway: LobbyGateway,
     private readonly achievementsService: AchievementsService,
+    private readonly metricsService: MetricsService,
     @InjectRepository(Match)
     private readonly matchRepo: Repository<Match>,
   ) {}
@@ -132,6 +134,14 @@ export class GameGateway
         try {
           const match = await this.gameResultService.getMatch(matchId);
           await this.gameResultService.processGameEnd(game, winnerId);
+
+          this.metricsService.incMatchesTotal();
+          if (match?.startAt) {
+            const durationSec = (Date.now() - new Date(match.startAt).getTime()) / 1000;
+            this.metricsService.observeMatchDuration(durationSec);
+          }
+          this.metricsService.setActiveMatches(this.pongEngine.getActiveGameCount());
+
           if (!game.isTournament) {
             this.server.emit('room:deleted', { roomId: game.roomId });
           }
@@ -160,6 +170,7 @@ export class GameGateway
       const payload = this.jwtService.verify<JwtPayload>(token);
       this.socketUser.set(client.id, payload.sub);
       this.userSocket.set(payload.sub, client.id);
+      this.metricsService.setWebSocketConnections(this.socketUser.size);
     } catch {
       client.disconnect();
     }
@@ -168,6 +179,7 @@ export class GameGateway
   handleDisconnect(client: Socket) {
     const userId = this.socketUser.get(client.id);
     this.socketUser.delete(client.id);
+    this.metricsService.setWebSocketConnections(this.socketUser.size);
     if (!userId) return;
 
     this.userSocket.delete(userId);
@@ -276,6 +288,7 @@ export class GameGateway
         match.player2Id!,
         !!match.tournamentId,
       );
+      this.metricsService.setActiveMatches(this.pongEngine.getActiveGameCount());
     }
 
     const player =
