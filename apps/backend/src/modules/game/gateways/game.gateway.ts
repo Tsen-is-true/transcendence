@@ -170,7 +170,7 @@ export class GameGateway
       const payload = this.jwtService.verify<JwtPayload>(token);
       this.socketUser.set(client.id, payload.sub);
       this.userSocket.set(payload.sub, client.id);
-      this.metricsService.setWebSocketConnections(this.socketUser.size);
+      this.metricsService.incWebSocketConnections();
     } catch {
       client.disconnect();
     }
@@ -179,7 +179,7 @@ export class GameGateway
   handleDisconnect(client: Socket) {
     const userId = this.socketUser.get(client.id);
     this.socketUser.delete(client.id);
-    this.metricsService.setWebSocketConnections(this.socketUser.size);
+    this.metricsService.decWebSocketConnections();
     if (!userId) return;
 
     this.userSocket.delete(userId);

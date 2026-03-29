@@ -13,6 +13,7 @@ import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from '@common/interfaces/jwt-payload.interface';
 import { ChatService } from '../chat.service';
 import { FriendsService } from '@modules/friends/friends.service';
+import { MetricsService } from '@modules/monitoring/metrics.service';
 
 function escapeHtml(str: string): string {
   return str
@@ -37,6 +38,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly jwtService: JwtService,
     private readonly chatService: ChatService,
     private readonly friendsService: FriendsService,
+    private readonly metricsService: MetricsService,
   ) {}
 
   async handleConnection(client: Socket) {
@@ -60,6 +62,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.userSockets.set(userId, new Set());
       }
       this.userSockets.get(userId)!.add(client.id);
+      this.metricsService.incWebSocketConnections();
     } catch {
       client.disconnect();
     }
@@ -68,6 +71,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   handleDisconnect(client: Socket) {
     const userId = this.socketUser.get(client.id);
     this.socketUser.delete(client.id);
+    this.metricsService.decWebSocketConnections();
 
     if (userId) {
       const sockets = this.userSockets.get(userId);

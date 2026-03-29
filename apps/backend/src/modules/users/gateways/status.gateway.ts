@@ -9,6 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users.service';
 import { FriendsService } from '@modules/friends/friends.service';
 import { JwtPayload } from '@common/interfaces/jwt-payload.interface';
+import { MetricsService } from '@modules/monitoring/metrics.service';
 
 @WebSocketGateway({ cors: true })
 export class StatusGateway
@@ -25,6 +26,7 @@ export class StatusGateway
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
     private readonly friendsService: FriendsService,
+    private readonly metricsService: MetricsService,
   ) {}
 
   async handleConnection(client: Socket) {
@@ -57,6 +59,7 @@ export class StatusGateway
 
       await this.usersService.update(userId, { isOnline: true });
       await this.broadcastStatus(userId, true);
+      this.metricsService.incWebSocketConnections();
     } catch {
       client.disconnect();
     }
@@ -67,6 +70,7 @@ export class StatusGateway
     if (!userId) return;
 
     this.socketUser.delete(client.id);
+    this.metricsService.decWebSocketConnections();
 
     const sockets = this.userSockets.get(userId);
     if (sockets) {

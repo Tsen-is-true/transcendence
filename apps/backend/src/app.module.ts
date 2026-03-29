@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -13,6 +14,7 @@ import { ChatModule } from './modules/chat/chat.module';
 import { AchievementsModule } from './modules/achievements/achievements.module';
 import { ApiKeysModule } from './modules/api-keys/api-keys.module';
 import { MonitoringModule } from './modules/monitoring/monitoring.module';
+import { HttpMetricsInterceptor } from './common/interceptors/http-metrics.interceptor';
 
 @Module({
   imports: [
@@ -44,6 +46,12 @@ import { MonitoringModule } from './modules/monitoring/monitoring.module';
     AchievementsModule,
     ApiKeysModule,
     MonitoringModule,
+  ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: HttpMetricsInterceptor,
+    },
   ],
 })
 export class AppModule {}

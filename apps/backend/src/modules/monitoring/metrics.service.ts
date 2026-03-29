@@ -6,24 +6,32 @@ collectDefaultMetrics();
 @Injectable()
 export class MetricsService {
   private readonly activeMatches: Gauge;
-  private readonly activeTournaments: Gauge;
   private readonly wsConnections: Gauge;
   private readonly matchesTotal: Counter;
   private readonly matchDuration: Histogram;
   private readonly registrations: Counter;
   private readonly logins: Counter;
   private readonly apiKeyRequests: Counter;
-  private readonly activeRooms: Gauge;
+  private readonly httpRequestsTotal: Counter;
+  private readonly httpRequestDuration: Histogram;
 
   constructor() {
+    this.httpRequestsTotal = new Counter({
+      name: 'http_requests_total',
+      help: 'Total number of HTTP requests',
+      labelNames: ['method', 'status', 'path'] as const,
+    });
+
+    this.httpRequestDuration = new Histogram({
+      name: 'http_request_duration_seconds',
+      help: 'HTTP request duration in seconds',
+      labelNames: ['method', 'status', 'path'] as const,
+      buckets: [0.01, 0.05, 0.1, 0.3, 0.5, 1, 2, 5],
+    });
+
     this.activeMatches = new Gauge({
       name: 'game_active_matches',
       help: 'Number of currently active game matches',
-    });
-
-    this.activeTournaments = new Gauge({
-      name: 'game_active_tournaments',
-      help: 'Number of currently active tournaments',
     });
 
     this.wsConnections = new Gauge({
@@ -57,23 +65,18 @@ export class MetricsService {
       name: 'api_key_requests_total',
       help: 'Total number of API key authenticated requests',
     });
-
-    this.activeRooms = new Gauge({
-      name: 'rooms_active_total',
-      help: 'Number of currently active rooms',
-    });
   }
 
   setActiveMatches(count: number) {
     this.activeMatches.set(count);
   }
 
-  setActiveTournaments(count: number) {
-    this.activeTournaments.set(count);
+  incWebSocketConnections() {
+    this.wsConnections.inc();
   }
 
-  setWebSocketConnections(count: number) {
-    this.wsConnections.set(count);
+  decWebSocketConnections() {
+    this.wsConnections.dec();
   }
 
   incMatchesTotal() {
@@ -96,8 +99,12 @@ export class MetricsService {
     this.apiKeyRequests.inc();
   }
 
-  setActiveRooms(count: number) {
-    this.activeRooms.set(count);
+  incHttpRequests(method: string, status: number, path: string) {
+    this.httpRequestsTotal.inc({ method, status: String(status), path });
+  }
+
+  observeHttpDuration(seconds: number, method: string, status: number, path: string) {
+    this.httpRequestDuration.observe({ method, status: String(status), path }, seconds);
   }
 
   async getMetrics(): Promise<string> {

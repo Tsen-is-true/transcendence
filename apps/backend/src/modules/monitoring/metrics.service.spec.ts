@@ -14,12 +14,12 @@ describe('MetricsService', () => {
       expect(() => service.setActiveMatches(5)).not.toThrow();
     });
 
-    it('setActiveTournaments should not throw', () => {
-      expect(() => service.setActiveTournaments(3)).not.toThrow();
+    it('incWebSocketConnections should not throw', () => {
+      expect(() => service.incWebSocketConnections()).not.toThrow();
     });
 
-    it('setWebSocketConnections should not throw', () => {
-      expect(() => service.setWebSocketConnections(42)).not.toThrow();
+    it('decWebSocketConnections should not throw', () => {
+      expect(() => service.decWebSocketConnections()).not.toThrow();
     });
 
     it('incMatchesTotal should not throw', () => {
@@ -38,9 +38,6 @@ describe('MetricsService', () => {
       expect(() => service.incApiKeyRequests()).not.toThrow();
     });
 
-    it('setActiveRooms should not throw', () => {
-      expect(() => service.setActiveRooms(10)).not.toThrow();
-    });
   });
 
   describe('incLogins', () => {
