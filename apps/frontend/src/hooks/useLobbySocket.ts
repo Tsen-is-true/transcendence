@@ -2,7 +2,11 @@ import { useEffect, useState, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useAuth } from '../contexts/AuthContext';
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || `${window.location.protocol}//${window.location.hostname}:3000`;
+const getSocketUrl = () =>
+  (import.meta as any).env?.VITE_SOCKET_URL ||
+  (typeof window !== 'undefined'
+    ? `${window.location.protocol}//${window.location.hostname}:3000`
+    : 'http://localhost:3000');
 
 export interface RoomMember {
   id: number;
@@ -63,7 +67,7 @@ export function useLobbySocket() {
     if (!token) return;
 
     console.log('🔌 Connecting to /lobby namespace...');
-    const newSocket = io(`${SOCKET_URL}/lobby`, {
+    const newSocket = io(`${getSocketUrl()}/lobby`, {
       auth: { token },
       query: { token },
     });

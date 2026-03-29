@@ -1,7 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || `${window.location.protocol}//${window.location.hostname}:3000`;
+const getSocketUrl = () =>
+  (import.meta as any).env?.VITE_SOCKET_URL ||
+  (typeof window !== 'undefined'
+    ? `${window.location.protocol}//${window.location.hostname}:3000`
+    : 'http://localhost:3000');
+
 
 export interface ServerGameState {
   canvas: { width: number; height: number };
@@ -48,7 +53,7 @@ export function useGameSocket(matchId: number | null) {
     }
 
     console.log(`🔌 Connecting to /game for match ${matchId}...`);
-    const newSocket = io(`${SOCKET_URL}/game`, {
+    const newSocket = io(`${getSocketUrl()}/game`, {
       auth: { token },
       reconnection: true,
       transports: ['websocket', 'polling'],

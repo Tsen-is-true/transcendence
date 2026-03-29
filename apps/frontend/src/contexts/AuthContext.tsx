@@ -27,6 +27,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // 로그인 상태 확인
   const checkAuth = async () => {
     try {
+      if (!sessionStorage.getItem('accessToken')) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
       const response = await apiFetch('/api/users/me');
 
       if (response.ok) {
