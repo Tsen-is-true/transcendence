@@ -12,6 +12,7 @@ import { Server, Socket } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from '@common/interfaces/jwt-payload.interface';
 import { RoomsService } from '../rooms.service';
+import { MetricsService } from '@modules/monitoring/metrics.service';
 
 @WebSocketGateway({ namespace: '/lobby', cors: true })
 export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -24,6 +25,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly jwtService: JwtService,
     @Inject(forwardRef(() => RoomsService))
     private readonly roomsService: RoomsService,
+    private readonly metricsService: MetricsService,
   ) {}
 
   async handleConnection(client: Socket) {
@@ -40,6 +42,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       const payload = this.jwtService.verify<JwtPayload>(token);
       this.socketUser.set(client.id, payload.sub);
+      this.metricsService.incWebSocketConnections();
     } catch {
       client.disconnect();
     }
@@ -47,6 +50,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleDisconnect(client: Socket) {
     this.socketUser.delete(client.id);
+    this.metricsService.decWebSocketConnections();
   }
 
   @SubscribeMessage('room:join')

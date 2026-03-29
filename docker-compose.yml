@@ -44,38 +44,45 @@ services:
       - "3000"
 
   nginx:
-    image: nginx:alpine
+    build: ./infra/nginx
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./infra/nginx/init-certs.sh:/docker-entrypoint.d/init-certs.sh:ro
       - nginx_certs:/etc/nginx/certs
-    entrypoint: ["sh", "/docker-entrypoint.d/init-certs.sh"]
     depends_on:
       - frontend
       - backend
+
+  node-exporter:
+    build: ./infra/node-exporter
+    expose:
+      - "9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
     restart: unless-stopped
 
   prometheus:
-    image: prom/prometheus:latest
-    volumes:
-      - ./infra/prometheus:/etc/prometheus
-    ports:
-      - "9090:9090"
+    build: ./infra/prometheus
+    expose:
+      - "9090"
     depends_on:
       - backend
+      - node-exporter
     restart: unless-stopped
 
   grafana:
-    image: grafana/grafana:latest
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+    build: ./infra/grafana
+    env_file:
+      - .env
     volumes:
-      - ./infra/grafana/provisioning:/etc/grafana/provisioning
-      - ./infra/grafana/dashboards:/var/lib/grafana/dashboards
       - grafana_data:/var/lib/grafana
     ports:
       - "3002:3000"

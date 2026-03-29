@@ -15,7 +15,6 @@ import { Match, MatchStatus } from '@modules/game/entities/match.entity';
 import { Tournament } from '@modules/tournaments/entities/tournament.entity';
 import { TournamentParticipant } from '@modules/tournaments/entities/tournament-participant.entity';
 import { UsersService } from '@modules/users/users.service';
-import { MetricsService } from '@modules/monitoring/metrics.service';
 import { LobbyGateway } from './gateways/lobby.gateway';
 import { CreateRoomDto } from './dto/create-room.dto';
 
@@ -33,7 +32,6 @@ export class RoomsService {
     @InjectRepository(TournamentParticipant)
     private readonly participantRepo: Repository<TournamentParticipant>,
     private readonly usersService: UsersService,
-    private readonly metricsService: MetricsService,
     private readonly dataSource: DataSource,
     @Inject(forwardRef(() => LobbyGateway))
     private readonly lobbyGateway: LobbyGateway,
@@ -59,7 +57,6 @@ export class RoomsService {
 
     const result = await this.findOne(savedRoom.roomId);
     this.lobbyGateway.emitRoomCreated(result);
-    this.metricsService.setActiveRooms(await this.roomRepo.count({ where: { status: RoomStatus.WAITING } }));
     return result;
   }
 
@@ -187,7 +184,6 @@ export class RoomsService {
     await this.memberRepo.delete({ roomId });
     await this.roomRepo.remove(room);
     this.lobbyGateway.emitRoomDeleted(roomId);
-    this.metricsService.setActiveRooms(await this.roomRepo.count({ where: { status: RoomStatus.WAITING } }));
   }
 
   async join(roomId: number, userId: number) {
@@ -278,7 +274,6 @@ export class RoomsService {
       if (room.countPlayers <= 0) {
         await roomRepo.remove(room);
         this.lobbyGateway.emitRoomDeleted(roomId);
-        this.metricsService.setActiveRooms(await this.roomRepo.count({ where: { status: RoomStatus.WAITING } }));
         return { roomId, userId, roomDeleted: true };
       }
 
@@ -391,9 +386,6 @@ export class RoomsService {
       currentRound: 1,
     });
     const savedTournament = await this.tournamentRepo.save(tournament);
-    this.metricsService.setActiveTournaments(
-      await this.tournamentRepo.count({ where: { isFinish: false } }),
-    );
 
     for (const member of members) {
       const participant = this.participantRepo.create({
