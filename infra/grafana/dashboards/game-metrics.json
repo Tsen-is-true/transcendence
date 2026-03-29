@@ -1,85 +1,54 @@
 {
-  "dashboard": {
-    "id": null,
-    "uid": "game-metrics",
-    "title": "Game Metrics",
-    "tags": ["transcendence", "game"],
-    "timezone": "browser",
-    "refresh": "10s",
-    "time": { "from": "now-1h", "to": "now" },
-    "panels": [
-      {
-        "id": 1,
-        "title": "Active Matches",
-        "type": "stat",
-        "gridPos": { "h": 8, "w": 6, "x": 0, "y": 0 },
-        "targets": [
-          {
-            "expr": "game_active_matches",
-            "legendFormat": "Active",
-            "refId": "A"
-          }
-        ],
-        "datasource": { "type": "prometheus", "uid": "prometheus" }
-      },
-      {
-        "id": 2,
-        "title": "Active Tournaments",
-        "type": "stat",
-        "gridPos": { "h": 8, "w": 6, "x": 6, "y": 0 },
-        "targets": [
-          {
-            "expr": "game_active_tournaments",
-            "legendFormat": "Active",
-            "refId": "A"
-          }
-        ],
-        "datasource": { "type": "prometheus", "uid": "prometheus" }
-      },
-      {
-        "id": 3,
-        "title": "Completed Matches Rate",
-        "type": "timeseries",
-        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
-        "targets": [
-          {
-            "expr": "rate(game_matches_total[5m]) * 60",
-            "legendFormat": "matches/min",
-            "refId": "A"
-          }
-        ],
-        "datasource": { "type": "prometheus", "uid": "prometheus" }
-      },
-      {
-        "id": 4,
-        "title": "Average Match Duration",
-        "type": "timeseries",
-        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
-        "targets": [
-          {
-            "expr": "rate(game_match_duration_seconds_sum[5m]) / rate(game_match_duration_seconds_count[5m])",
-            "legendFormat": "Avg Duration",
-            "refId": "A"
-          }
-        ],
-        "datasource": { "type": "prometheus", "uid": "prometheus" },
-        "fieldConfig": { "defaults": { "unit": "s" } }
-      },
-      {
-        "id": 5,
-        "title": "Active Rooms",
-        "type": "stat",
-        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
-        "targets": [
-          {
-            "expr": "rooms_active_total",
-            "legendFormat": "Rooms",
-            "refId": "A"
-          }
-        ],
-        "datasource": { "type": "prometheus", "uid": "prometheus" }
-      }
-    ]
-  },
-  "overwrite": true
+  "id": null,
+  "uid": "game-metrics",
+  "title": "Game Metrics",
+  "tags": ["transcendence", "game"],
+  "timezone": "browser",
+  "refresh": "10s",
+  "time": { "from": "now-1h", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Active Matches",
+      "type": "stat",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "expr": "game_active_matches",
+          "legendFormat": "Active",
+          "refId": "A"
+        }
+      ],
+      "datasource": { "type": "prometheus", "uid": "prometheus" }
+    },
+    {
+      "id": 3,
+      "title": "Completed Matches Rate",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 16, "x": 8, "y": 0 },
+      "targets": [
+        {
+          "expr": "rate(game_matches_total[5m]) * 60",
+          "legendFormat": "matches/min",
+          "refId": "A"
+        }
+      ],
+      "datasource": { "type": "prometheus", "uid": "prometheus" }
+    },
+    {
+      "id": 4,
+      "title": "Average Match Duration",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "expr": "rate(game_match_duration_seconds_sum[5m]) / rate(game_match_duration_seconds_count[5m])",
+          "legendFormat": "Avg Duration",
+          "refId": "A"
+        }
+      ],
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": { "defaults": { "unit": "s" } }
+    }
+  ]
 }
