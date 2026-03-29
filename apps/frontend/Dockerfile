@@ -7,7 +7,11 @@ RUN npm run build
 
 FROM node:20-alpine
 WORKDIR /app
-RUN npm install -g serve
+COPY package*.json ./
+RUN npm ci --omit=dev
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/server.js ./server.js
+COPY --from=builder /app/index.html ./index.html
 EXPOSE 3000
-CMD ["serve", "-s", "dist", "-p", "3000"]
+ENV NODE_ENV=production
+CMD ["node", "server.js"]

@@ -7,7 +7,7 @@ import './index.css';
 ReactDOM.hydrateRoot(
   document.getElementById('root')!,
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <App />
     </BrowserRouter>
   </React.StrictMode>
