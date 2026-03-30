@@ -31,13 +31,15 @@ export function LocalGameCanvas({ gameState, width, height, theme }: LocalGameCa
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Draw ball
+    // Draw ball - Dynamic Color based on half-line
+    const isLeftHalf = gameState.ball.position.x < width / 2;
     if (isXerath) {
-      ctx.shadowColor = '#00f2ff';
+      const ballColor = isLeftHalf ? '#00f2ff' : '#ffaa00';
+      ctx.shadowColor = ballColor;
       ctx.shadowBlur = 25;
-      ctx.fillStyle = '#00f2ff';
+      ctx.fillStyle = ballColor;
     } else {
-      ctx.fillStyle = '#fff';
+      ctx.fillStyle = isLeftHalf ? '#4ade80' : '#f87171';
       ctx.shadowBlur = 0;
     }
     

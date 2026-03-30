@@ -33,10 +33,14 @@ export function OnlineGameCanvas({ gameState, playerNumber }: OnlineGameCanvasPr
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // Draw ball
-    ctx.shadowColor = '#00f2ff';
+    // Draw ball - Dynamic Color based on half-line
+    const isLeft = ball.x < canvas.width / 2;
+    const ballColor = isLeft ? '#00f2ff' : '#ffaa00';
+    // console.log(`[Debug] Ball X: ${ball.x}, Half: ${canvas.width/2}, Color: ${ballColor}`);
+    
+    ctx.shadowColor = ballColor;
     ctx.shadowBlur = 25;
-    ctx.fillStyle = '#00f2ff';
+    ctx.fillStyle = ballColor;
     ctx.beginPath();
     ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
     ctx.fill();
