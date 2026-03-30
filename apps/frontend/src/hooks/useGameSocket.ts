@@ -4,7 +4,7 @@ import { io, Socket } from 'socket.io-client';
 const getSocketUrl = () =>
   (import.meta as any).env?.VITE_SOCKET_URL ||
   (typeof window !== 'undefined'
-    ? `${window.location.protocol}//${window.location.hostname}:3000`
+    ? window.location.origin
     : 'http://localhost:3000');
 
 
