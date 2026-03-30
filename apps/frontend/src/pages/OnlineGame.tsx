@@ -273,7 +273,25 @@ function TournamentResultScreen({
             )}
           </div>
         ) : (
-          null
+          <div className="mt-12 flex flex-col items-center gap-6">
+            <button
+              onClick={async () => {
+                const rId = result?.roomId;
+                if (rId) {
+                  await apiFetch(`/api/rooms/${rId}/leave`, { method: 'POST' }).catch(() => {});
+                }
+                navigate('/lobby');
+              }}
+              className="group relative px-12 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black rounded-2xl transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] hover:scale-105 active:scale-95 border border-white/20 uppercase tracking-widest"
+            >
+              <span className="relative z-10 flex items-center gap-2">
+                🏠 로비로 돌아가기
+              </span>
+            </button>
+            <p className="text-gray-500 text-xs font-mono uppercase tracking-[0.4em] animate-pulse">
+              Match Consumed . Session Closed
+            </p>
+          </div>
         )}
       </div>
     </div>

@@ -63,8 +63,11 @@ export function GameCanvas({ gameState, playerNumber }: OnlineGameCanvasProps) {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    // ball
-    ctx.fillStyle = '#fff';
+    // ball - Dynamic Color based on half-line
+    const ballColor = gameState.ball.x < width / 2 ? '#00f2ff' : '#ffaa00';
+    ctx.shadowColor = ballColor;
+    ctx.shadowBlur = 20;
+    ctx.fillStyle = ballColor;
     ctx.beginPath();
     ctx.arc(
       gameState.ball.x,
@@ -75,8 +78,11 @@ export function GameCanvas({ gameState, playerNumber }: OnlineGameCanvasProps) {
     );
     ctx.fill();
 
-    // paddle1
-    ctx.fillStyle = playerNumber === 1 ? '#4ade80' : '#fff';
+    // paddle1 (left) - Neon Cyan
+    const p1Color = '#00f2ff';
+    ctx.shadowColor = p1Color;
+    ctx.shadowBlur = 15;
+    ctx.fillStyle = p1Color;
     ctx.fillRect(
       gameState.paddle1.x,
       gameState.paddle1.y,
@@ -84,14 +90,20 @@ export function GameCanvas({ gameState, playerNumber }: OnlineGameCanvasProps) {
       gameState.paddle1.height
     );
 
-    // paddle2
-    ctx.fillStyle = playerNumber === 2 ? '#4ade80' : '#fff';
+    // paddle2 (right) - Neon Gold
+    const p2Color = '#ffaa00';
+    ctx.shadowColor = p2Color;
+    ctx.shadowBlur = 15;
+    ctx.fillStyle = p2Color;
     ctx.fillRect(
       gameState.paddle2.x,
       gameState.paddle2.y,
       gameState.paddle2.width,
       gameState.paddle2.height
     );
+
+    // Reset shadow for other elements
+    ctx.shadowBlur = 0;
 
     // scores
     ctx.font = '48px monospace';
