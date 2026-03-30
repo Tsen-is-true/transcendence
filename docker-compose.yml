@@ -40,6 +40,9 @@ services:
       - .env
     depends_on:
       - backend
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
     expose:
       - "3000"
 
