@@ -2,18 +2,18 @@ apiVersion: 1
 
 policies:
   - orgId: 1
-    receiver: Default
+    receiver: Slack
     group_by:
       - alertname
     group_wait: 10s
     group_interval: 1m
     repeat_interval: 5m
     routes:
-      - receiver: Default
+      - receiver: Slack
         matchers:
           - severity = info
         repeat_interval: 2m
-      - receiver: Default
+      - receiver: Slack
         matchers:
           - severity = warning
         repeat_interval: 4m
