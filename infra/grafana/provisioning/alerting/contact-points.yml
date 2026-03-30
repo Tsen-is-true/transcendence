@@ -2,15 +2,9 @@ apiVersion: 1
 
 contactPoints:
   - orgId: 1
-    name: Slack
+    name: Default
     receivers:
-      - uid: slack-receiver
-        type: slack
+      - uid: default-receiver
+        type: email
         settings:
-          url: $SLACK_WEBHOOK_URL
-          httpMethod: POST
-          title: |
-            {{ if eq .Status "firing" }}[{{ .CommonLabels.severity | toUpper }}] {{ .CommonAnnotations.summary }}{{ else }}[RESOLVED] {{ .CommonAnnotations.summary }}{{ end }}
-          text: |
-            {{ .CommonAnnotations.description }}
-        disableResolveMessage: false
+          addresses: "admin@localhost"
