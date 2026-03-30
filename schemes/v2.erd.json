@@ -4,8 +4,8 @@
   "settings": {
     "width": 4000,
     "height": 3000,
-    "scrollTop": -376.6167,
-    "scrollLeft": -451.262,
+    "scrollTop": -1098.6167,
+    "scrollLeft": -600.262,
     "zoomLevel": 0.71,
     "show": 431,
     "database": 16,
@@ -78,10 +78,10 @@
         "comment": "",
         "columnIds": [
           "C_users_userid",
+          "C_users_intraId",
           "C_users_email",
           "C_users_password",
           "C_users_nickname",
-          "C_users_intraId",
           "C_users_avatarUrl",
           "C_users_wins",
           "C_users_loses",
@@ -92,6 +92,7 @@
           "C_users_maxStreak",
           "C_users_oauthProvider",
           "C_users_oauthId",
+          "C_users_hashedRefreshToken",
           "C_users_isPlaying",
           "C_users_isOnline",
           "C_users_lastSeenAt",
@@ -100,10 +101,10 @@
         ],
         "seqColumnIds": [
           "C_users_userid",
+          "C_users_intraId",
           "C_users_email",
           "C_users_password",
           "C_users_nickname",
-          "C_users_intraId",
           "C_users_avatarUrl",
           "C_users_wins",
           "C_users_loses",
@@ -114,6 +115,7 @@
           "C_users_maxStreak",
           "C_users_oauthProvider",
           "C_users_oauthId",
+          "C_users_hashedRefreshToken",
           "C_users_isPlaying",
           "C_users_isOnline",
           "C_users_lastSeenAt",
@@ -194,7 +196,7 @@
           "x": 50,
           "y": 550,
           "zIndex": 2,
-          "widthName": 85,
+          "widthName": 91,
           "widthComment": 60,
           "color": ""
         },
@@ -229,7 +231,7 @@
           "x": 1100,
           "y": 50,
           "zIndex": 2,
-          "widthName": 70,
+          "widthName": 73,
           "widthComment": 60,
           "color": ""
         },
@@ -260,7 +262,7 @@
           "x": 1100,
           "y": 550,
           "zIndex": 2,
-          "widthName": 131,
+          "widthName": 142,
           "widthComment": 60,
           "color": ""
         },
@@ -333,15 +335,15 @@
           "C_score_createdAt"
         ],
         "ui": {
-          "x": 550,
-          "y": 1050,
+          "x": 579.5775,
+          "y": 1055.6338,
           "zIndex": 2,
           "widthName": 60,
           "widthComment": 60,
           "color": ""
         },
         "meta": {
-          "updateAt": 0,
+          "updateAt": 1774883932310,
           "createAt": 0
         }
       },
@@ -366,15 +368,15 @@
           "C_friends_updatedAt"
         ],
         "ui": {
-          "x": 50,
-          "y": 1050,
+          "x": 111.9718,
+          "y": 1279.5775,
           "zIndex": 2,
           "widthName": 60,
           "widthComment": 60,
           "color": ""
         },
         "meta": {
-          "updateAt": 0,
+          "updateAt": 1774883931232,
           "createAt": 0
         }
       },
@@ -437,7 +439,7 @@
           "x": 1650,
           "y": 50,
           "zIndex": 2,
-          "widthName": 75,
+          "widthName": 80,
           "widthComment": 60,
           "color": ""
         },
@@ -466,7 +468,7 @@
           "x": 1650,
           "y": 550,
           "zIndex": 2,
-          "widthName": 115,
+          "widthName": 111,
           "widthComment": 60,
           "color": ""
         },
@@ -483,6 +485,7 @@
           "C_ak_apiKeyId",
           "C_ak_userId",
           "C_ak_keyHash",
+          "C_ak_keyPrefix",
           "C_ak_name",
           "C_ak_isActive",
           "C_ak_lastUsedAt",
@@ -494,6 +497,7 @@
           "C_ak_apiKeyId",
           "C_ak_userId",
           "C_ak_keyHash",
+          "C_ak_keyPrefix",
           "C_ak_name",
           "C_ak_isActive",
           "C_ak_lastUsedAt",
@@ -527,11 +531,14 @@
         "ui": {
           "keys": 1,
           "widthName": 60,
-          "widthComment": 79,
+          "widthComment": 84,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_email": {
         "id": "C_users_email",
@@ -545,10 +552,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 60,
-          "widthDataType": 81,
+          "widthDataType": 90,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_password": {
         "id": "C_users_password",
@@ -561,17 +571,20 @@
         "ui": {
           "keys": 0,
           "widthName": 60,
-          "widthComment": 145,
-          "widthDataType": 81,
+          "widthComment": 165,
+          "widthDataType": 90,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_nickname": {
         "id": "C_users_nickname",
         "tableId": "T_users",
         "name": "nickname",
-        "comment": "",
+        "comment": "UNIQUE",
         "dataType": "VARCHAR(50)",
         "default": "",
         "options": 8,
@@ -579,10 +592,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 60,
-          "widthDataType": 75,
+          "widthDataType": 83,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_intraId": {
         "id": "C_users_intraId",
@@ -596,10 +612,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 60,
-          "widthDataType": 75,
+          "widthDataType": 83,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_avatarUrl": {
         "id": "C_users_avatarUrl",
@@ -613,10 +632,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 60,
-          "widthDataType": 81,
+          "widthDataType": 90,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_wins": {
         "id": "C_users_wins",
@@ -633,7 +655,10 @@
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_loses": {
         "id": "C_users_loses",
@@ -650,7 +675,10 @@
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_elo": {
         "id": "C_users_elo",
@@ -663,11 +691,14 @@
         "ui": {
           "keys": 0,
           "widthName": 60,
-          "widthComment": 68,
+          "widthComment": 60,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_level": {
         "id": "C_users_level",
@@ -684,7 +715,10 @@
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_xp": {
         "id": "C_users_xp",
@@ -701,7 +735,10 @@
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_streak": {
         "id": "C_users_streak",
@@ -718,7 +755,10 @@
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_maxStreak": {
         "id": "C_users_maxStreak",
@@ -730,12 +770,15 @@
         "options": 8,
         "ui": {
           "keys": 0,
-          "widthName": 61,
+          "widthName": 62,
           "widthComment": 60,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_oauthProvider": {
         "id": "C_users_oauthProvider",
@@ -747,12 +790,15 @@
         "options": 0,
         "ui": {
           "keys": 0,
-          "widthName": 80,
-          "widthComment": 80,
-          "widthDataType": 75,
+          "widthName": 81,
+          "widthComment": 76,
+          "widthDataType": 83,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_oauthId": {
         "id": "C_users_oauthId",
@@ -765,11 +811,34 @@
         "ui": {
           "keys": 0,
           "widthName": 60,
-          "widthComment": 82,
-          "widthDataType": 81,
+          "widthComment": 77,
+          "widthDataType": 89,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_users_hashedRefreshToken": {
+        "id": "C_users_hashedRefreshToken",
+        "tableId": "T_users",
+        "name": "hashedRefreshToken",
+        "comment": "refresh token hash",
+        "dataType": "VARCHAR(255)",
+        "default": "",
+        "options": 0,
+        "ui": {
+          "keys": 0,
+          "widthName": 119,
+          "widthComment": 107,
+          "widthDataType": 90,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_isPlaying": {
         "id": "C_users_isPlaying",
@@ -786,7 +855,10 @@
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_isOnline": {
         "id": "C_users_isOnline",
@@ -803,7 +875,10 @@
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_lastSeenAt": {
         "id": "C_users_lastSeenAt",
@@ -816,11 +891,14 @@
         "ui": {
           "keys": 0,
           "widthName": 63,
-          "widthComment": 70,
-          "widthDataType": 65,
+          "widthComment": 60,
+          "widthDataType": 71,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_createdAt": {
         "id": "C_users_createdAt",
@@ -834,10 +912,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 60,
-          "widthDataType": 65,
-          "widthDefault": 120
+          "widthDataType": 71,
+          "widthDefault": 133
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_users_updatedAt": {
         "id": "C_users_updatedAt",
@@ -849,12 +930,15 @@
         "options": 8,
         "ui": {
           "keys": 0,
-          "widthName": 60,
-          "widthComment": 68,
-          "widthDataType": 65,
-          "widthDefault": 120
+          "widthName": 61,
+          "widthComment": 70,
+          "widthDataType": 71,
+          "widthDefault": 133
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_rooms_roomId": {
         "id": "C_rooms_roomId",
@@ -867,11 +951,14 @@
         "ui": {
           "keys": 1,
           "widthName": 60,
-          "widthComment": 79,
+          "widthComment": 84,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_rooms_hostUserId": {
         "id": "C_rooms_hostUserId",
@@ -883,12 +970,15 @@
         "options": 8,
         "ui": {
           "keys": 2,
-          "widthName": 60,
-          "widthComment": 60,
+          "widthName": 64,
+          "widthComment": 65,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_rooms_title": {
         "id": "C_rooms_title",
@@ -902,10 +992,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 60,
-          "widthDataType": 81,
+          "widthDataType": 89,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_rooms_status": {
         "id": "C_rooms_status",
@@ -918,11 +1011,14 @@
         "ui": {
           "keys": 0,
           "widthName": 60,
-          "widthComment": 140,
+          "widthComment": 135,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_rooms_isTournaments": {
         "id": "C_rooms_isTournaments",
@@ -934,12 +1030,15 @@
         "options": 8,
         "ui": {
           "keys": 0,
-          "widthName": 75,
-          "widthComment": 70,
+          "widthName": 78,
+          "widthComment": 62,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_rooms_countPlayers": {
         "id": "C_rooms_countPlayers",
@@ -951,12 +1050,15 @@
         "options": 8,
         "ui": {
           "keys": 0,
-          "widthName": 69,
+          "widthName": 75,
           "widthComment": 60,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_rooms_maxPlayers": {
         "id": "C_rooms_maxPlayers",
@@ -968,12 +1070,15 @@
         "options": 8,
         "ui": {
           "keys": 0,
-          "widthName": 61,
+          "widthName": 66,
           "widthComment": 60,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_rooms_createdAt": {
         "id": "C_rooms_createdAt",
@@ -987,10 +1092,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 60,
-          "widthDataType": 65,
-          "widthDefault": 120
+          "widthDataType": 71,
+          "widthDefault": 133
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_rooms_updatedAt": {
         "id": "C_rooms_updatedAt",
@@ -1002,12 +1110,15 @@
         "options": 8,
         "ui": {
           "keys": 0,
-          "widthName": 60,
-          "widthComment": 68,
-          "widthDataType": 65,
-          "widthDefault": 120
+          "widthName": 61,
+          "widthComment": 70,
+          "widthDataType": 71,
+          "widthDefault": 133
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_rm_roomMemberId": {
         "id": "C_rm_roomMemberId",
@@ -1019,12 +1130,15 @@
         "options": 11,
         "ui": {
           "keys": 1,
-          "widthName": 86,
-          "widthComment": 79,
+          "widthName": 88,
+          "widthComment": 84,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_rm_roomId": {
         "id": "C_rm_roomId",
@@ -1037,11 +1151,14 @@
         "ui": {
           "keys": 2,
           "widthName": 60,
-          "widthComment": 65,
+          "widthComment": 70,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_rm_userId": {
         "id": "C_rm_userId",
@@ -1054,11 +1171,14 @@
         "ui": {
           "keys": 2,
           "widthName": 60,
-          "widthComment": 60,
+          "widthComment": 65,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_rm_isReady": {
         "id": "C_rm_isReady",
@@ -1075,7 +1195,10 @@
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_rm_joinedAt": {
         "id": "C_rm_joinedAt",
@@ -1089,10 +1212,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 60,
-          "widthDataType": 65,
-          "widthDefault": 120
+          "widthDataType": 71,
+          "widthDefault": 133
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_tour_tournamentId": {
         "id": "C_tour_tournamentId",
@@ -1104,12 +1230,15 @@
         "options": 11,
         "ui": {
           "keys": 1,
-          "widthName": 75,
-          "widthComment": 79,
+          "widthName": 78,
+          "widthComment": 84,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_tour_roomId": {
         "id": "C_tour_roomId",
@@ -1122,11 +1251,14 @@
         "ui": {
           "keys": 2,
           "widthName": 60,
-          "widthComment": 65,
+          "widthComment": 70,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_tour_isFinish": {
         "id": "C_tour_isFinish",
@@ -1143,7 +1275,10 @@
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_tour_winnerId": {
         "id": "C_tour_winnerId",
@@ -1156,11 +1291,14 @@
         "ui": {
           "keys": 2,
           "widthName": 60,
-          "widthComment": 60,
+          "widthComment": 65,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_tour_currentRound": {
         "id": "C_tour_currentRound",
@@ -1172,12 +1310,15 @@
         "options": 8,
         "ui": {
           "keys": 0,
-          "widthName": 74,
+          "widthName": 79,
           "widthComment": 60,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_tour_createdAt": {
         "id": "C_tour_createdAt",
@@ -1191,10 +1332,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 60,
-          "widthDataType": 65,
-          "widthDefault": 120
+          "widthDataType": 71,
+          "widthDefault": 133
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_tour_updatedAt": {
         "id": "C_tour_updatedAt",
@@ -1206,12 +1350,15 @@
         "options": 8,
         "ui": {
           "keys": 0,
-          "widthName": 60,
-          "widthComment": 68,
-          "widthDataType": 65,
-          "widthDefault": 120
+          "widthName": 61,
+          "widthComment": 70,
+          "widthDataType": 71,
+          "widthDefault": 133
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_tp_participantId": {
         "id": "C_tp_participantId",
@@ -1223,12 +1370,15 @@
         "options": 11,
         "ui": {
           "keys": 1,
-          "widthName": 131,
-          "widthComment": 79,
+          "widthName": 139,
+          "widthComment": 84,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_tp_tournamentId": {
         "id": "C_tp_tournamentId",
@@ -1240,12 +1390,15 @@
         "options": 8,
         "ui": {
           "keys": 2,
-          "widthName": 75,
-          "widthComment": 99,
+          "widthName": 78,
+          "widthComment": 106,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_tp_userId": {
         "id": "C_tp_userId",
@@ -1258,11 +1411,14 @@
         "ui": {
           "keys": 2,
           "widthName": 60,
-          "widthComment": 60,
+          "widthComment": 65,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_tp_status": {
         "id": "C_tp_status",
@@ -1275,11 +1431,14 @@
         "ui": {
           "keys": 0,
           "widthName": 60,
-          "widthComment": 140,
+          "widthComment": 139,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_tp_joinedAt": {
         "id": "C_tp_joinedAt",
@@ -1293,10 +1452,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 60,
-          "widthDataType": 65,
-          "widthDefault": 120
+          "widthDataType": 71,
+          "widthDefault": 133
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_match_matchId": {
         "id": "C_match_matchId",
@@ -1309,11 +1471,14 @@
         "ui": {
           "keys": 1,
           "widthName": 60,
-          "widthComment": 79,
+          "widthComment": 84,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_match_tournamentId": {
         "id": "C_match_tournamentId",
@@ -1325,12 +1490,15 @@
         "options": 0,
         "ui": {
           "keys": 2,
-          "widthName": 75,
-          "widthComment": 99,
+          "widthName": 78,
+          "widthComment": 106,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_match_roomId": {
         "id": "C_match_roomId",
@@ -1343,11 +1511,14 @@
         "ui": {
           "keys": 2,
           "widthName": 60,
-          "widthComment": 65,
+          "widthComment": 70,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_match_player1Id": {
         "id": "C_match_player1Id",
@@ -1360,11 +1531,14 @@
         "ui": {
           "keys": 2,
           "widthName": 60,
-          "widthComment": 60,
+          "widthComment": 65,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_match_player2Id": {
         "id": "C_match_player2Id",
@@ -1377,11 +1551,14 @@
         "ui": {
           "keys": 2,
           "widthName": 60,
-          "widthComment": 60,
+          "widthComment": 65,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_match_winnerId": {
         "id": "C_match_winnerId",
@@ -1394,11 +1571,14 @@
         "ui": {
           "keys": 2,
           "widthName": 60,
-          "widthComment": 60,
+          "widthComment": 65,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_match_round": {
         "id": "C_match_round",
@@ -1411,11 +1591,14 @@
         "ui": {
           "keys": 0,
           "widthName": 60,
-          "widthComment": 74,
+          "widthComment": 64,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_match_matchOrder": {
         "id": "C_match_matchOrder",
@@ -1427,12 +1610,15 @@
         "options": 8,
         "ui": {
           "keys": 0,
-          "widthName": 66,
-          "widthComment": 120,
+          "widthName": 70,
+          "widthComment": 106,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_match_nextMatchId": {
         "id": "C_match_nextMatchId",
@@ -1444,12 +1630,15 @@
         "options": 0,
         "ui": {
           "keys": 2,
-          "widthName": 68,
-          "widthComment": 68,
+          "widthName": 72,
+          "widthComment": 62,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_match_status": {
         "id": "C_match_status",
@@ -1462,11 +1651,14 @@
         "ui": {
           "keys": 0,
           "widthName": 60,
-          "widthComment": 195,
+          "widthComment": 188,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_match_startAt": {
         "id": "C_match_startAt",
@@ -1480,10 +1672,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 60,
-          "widthDataType": 65,
+          "widthDataType": 71,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_match_finishAt": {
         "id": "C_match_finishAt",
@@ -1497,10 +1692,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 60,
-          "widthDataType": 65,
+          "widthDataType": 71,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_score_scoreId": {
         "id": "C_score_scoreId",
@@ -1513,11 +1711,14 @@
         "ui": {
           "keys": 1,
           "widthName": 60,
-          "widthComment": 79,
+          "widthComment": 84,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_score_matchId": {
         "id": "C_score_matchId",
@@ -1530,11 +1731,14 @@
         "ui": {
           "keys": 2,
           "widthName": 60,
-          "widthComment": 70,
+          "widthComment": 76,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_score_player1Score": {
         "id": "C_score_player1Score",
@@ -1546,12 +1750,15 @@
         "options": 8,
         "ui": {
           "keys": 0,
-          "widthName": 70,
+          "widthName": 75,
           "widthComment": 60,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_score_player2Score": {
         "id": "C_score_player2Score",
@@ -1563,12 +1770,15 @@
         "options": 8,
         "ui": {
           "keys": 0,
-          "widthName": 70,
+          "widthName": 76,
           "widthComment": 60,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_score_createdAt": {
         "id": "C_score_createdAt",
@@ -1582,10 +1792,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 60,
-          "widthDataType": 65,
-          "widthDefault": 120
+          "widthDataType": 71,
+          "widthDefault": 133
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_friends_friendshipId": {
         "id": "C_friends_friendshipId",
@@ -1597,12 +1810,15 @@
         "options": 11,
         "ui": {
           "keys": 1,
-          "widthName": 72,
-          "widthComment": 79,
+          "widthName": 69,
+          "widthComment": 84,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_friends_requesterId": {
         "id": "C_friends_requesterId",
@@ -1614,12 +1830,15 @@
         "options": 8,
         "ui": {
           "keys": 2,
-          "widthName": 65,
-          "widthComment": 60,
+          "widthName": 67,
+          "widthComment": 65,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_friends_addresseeId": {
         "id": "C_friends_addresseeId",
@@ -1631,12 +1850,15 @@
         "options": 8,
         "ui": {
           "keys": 2,
-          "widthName": 68,
-          "widthComment": 60,
+          "widthName": 71,
+          "widthComment": 65,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_friends_status": {
         "id": "C_friends_status",
@@ -1649,11 +1871,14 @@
         "ui": {
           "keys": 0,
           "widthName": 60,
-          "widthComment": 140,
+          "widthComment": 153,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_friends_createdAt": {
         "id": "C_friends_createdAt",
@@ -1667,10 +1892,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 60,
-          "widthDataType": 65,
-          "widthDefault": 120
+          "widthDataType": 71,
+          "widthDefault": 133
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_friends_updatedAt": {
         "id": "C_friends_updatedAt",
@@ -1682,12 +1910,15 @@
         "options": 8,
         "ui": {
           "keys": 0,
-          "widthName": 60,
-          "widthComment": 68,
-          "widthDataType": 65,
-          "widthDefault": 120
+          "widthName": 61,
+          "widthComment": 70,
+          "widthDataType": 71,
+          "widthDefault": 133
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_msg_messageId": {
         "id": "C_msg_messageId",
@@ -1699,12 +1930,15 @@
         "options": 11,
         "ui": {
           "keys": 1,
-          "widthName": 62,
-          "widthComment": 79,
+          "widthName": 63,
+          "widthComment": 84,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_msg_senderId": {
         "id": "C_msg_senderId",
@@ -1717,11 +1951,14 @@
         "ui": {
           "keys": 2,
           "widthName": 60,
-          "widthComment": 60,
+          "widthComment": 65,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_msg_receiverId": {
         "id": "C_msg_receiverId",
@@ -1734,11 +1971,14 @@
         "ui": {
           "keys": 2,
           "widthName": 60,
-          "widthComment": 60,
+          "widthComment": 65,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_msg_content": {
         "id": "C_msg_content",
@@ -1751,11 +1991,14 @@
         "ui": {
           "keys": 0,
           "widthName": 60,
-          "widthComment": 70,
+          "widthComment": 60,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_msg_isRead": {
         "id": "C_msg_isRead",
@@ -1772,7 +2015,10 @@
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_msg_createdAt": {
         "id": "C_msg_createdAt",
@@ -1786,10 +2032,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 60,
-          "widthDataType": 65,
-          "widthDefault": 120
+          "widthDataType": 71,
+          "widthDefault": 133
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_achv_achievementId": {
         "id": "C_achv_achievementId",
@@ -1801,12 +2050,15 @@
         "options": 11,
         "ui": {
           "keys": 1,
-          "widthName": 80,
-          "widthComment": 79,
+          "widthName": 84,
+          "widthComment": 84,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_achv_name": {
         "id": "C_achv_name",
@@ -1820,10 +2072,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 120,
-          "widthDataType": 75,
+          "widthDataType": 83,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_achv_displayName": {
         "id": "C_achv_displayName",
@@ -1835,12 +2090,15 @@
         "options": 8,
         "ui": {
           "keys": 0,
-          "widthName": 70,
+          "widthName": 75,
           "widthComment": 60,
-          "widthDataType": 81,
+          "widthDataType": 89,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_achv_description": {
         "id": "C_achv_description",
@@ -1854,10 +2112,13 @@
           "keys": 0,
           "widthName": 65,
           "widthComment": 60,
-          "widthDataType": 81,
+          "widthDataType": 90,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_achv_icon": {
         "id": "C_achv_icon",
@@ -1870,11 +2131,14 @@
         "ui": {
           "keys": 0,
           "widthName": 60,
-          "widthComment": 67,
-          "widthDataType": 81,
+          "widthComment": 60,
+          "widthDataType": 90,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_achv_condition": {
         "id": "C_achv_condition",
@@ -1887,11 +2151,14 @@
         "ui": {
           "keys": 0,
           "widthName": 60,
-          "widthComment": 72,
-          "widthDataType": 81,
+          "widthComment": 61,
+          "widthDataType": 89,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_achv_threshold": {
         "id": "C_achv_threshold",
@@ -1904,11 +2171,14 @@
         "ui": {
           "keys": 0,
           "widthName": 60,
-          "widthComment": 66,
+          "widthComment": 60,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_ua_userAchievementId": {
         "id": "C_ua_userAchievementId",
@@ -1921,11 +2191,14 @@
         "ui": {
           "keys": 1,
           "widthName": 110,
-          "widthComment": 79,
+          "widthComment": 84,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_ua_userId": {
         "id": "C_ua_userId",
@@ -1938,11 +2211,14 @@
         "ui": {
           "keys": 2,
           "widthName": 60,
-          "widthComment": 60,
+          "widthComment": 65,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_ua_achievementId": {
         "id": "C_ua_achievementId",
@@ -1954,12 +2230,15 @@
         "options": 8,
         "ui": {
           "keys": 2,
-          "widthName": 80,
-          "widthComment": 104,
+          "widthName": 84,
+          "widthComment": 112,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_ua_unlockedAt": {
         "id": "C_ua_unlockedAt",
@@ -1971,12 +2250,15 @@
         "options": 8,
         "ui": {
           "keys": 0,
-          "widthName": 64,
+          "widthName": 65,
           "widthComment": 60,
-          "widthDataType": 65,
-          "widthDefault": 120
+          "widthDataType": 71,
+          "widthDefault": 133
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_ak_apiKeyId": {
         "id": "C_ak_apiKeyId",
@@ -1989,11 +2271,14 @@
         "ui": {
           "keys": 1,
           "widthName": 60,
-          "widthComment": 79,
+          "widthComment": 84,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_ak_userId": {
         "id": "C_ak_userId",
@@ -2006,11 +2291,14 @@
         "ui": {
           "keys": 2,
           "widthName": 60,
-          "widthComment": 60,
+          "widthComment": 65,
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_ak_keyHash": {
         "id": "C_ak_keyHash",
@@ -2023,11 +2311,34 @@
         "ui": {
           "keys": 0,
           "widthName": 60,
-          "widthComment": 78,
+          "widthComment": 79,
+          "widthDataType": 90,
+          "widthDefault": 60
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
+      },
+      "C_ak_keyPrefix": {
+        "id": "C_ak_keyPrefix",
+        "tableId": "T_api_keys",
+        "name": "keyPrefix",
+        "comment": "공개용 prefix",
+        "dataType": "VARCHAR(10)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0,
+          "widthName": 60,
+          "widthComment": 69,
           "widthDataType": 81,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_ak_name": {
         "id": "C_ak_name",
@@ -2041,10 +2352,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 60,
-          "widthDataType": 81,
+          "widthDataType": 89,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_ak_isActive": {
         "id": "C_ak_isActive",
@@ -2061,7 +2375,10 @@
           "widthDataType": 60,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_ak_lastUsedAt": {
         "id": "C_ak_lastUsedAt",
@@ -2073,12 +2390,15 @@
         "options": 0,
         "ui": {
           "keys": 0,
-          "widthName": 63,
-          "widthComment": 70,
-          "widthDataType": 65,
+          "widthName": 64,
+          "widthComment": 60,
+          "widthDataType": 71,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_ak_expiresAt": {
         "id": "C_ak_expiresAt",
@@ -2091,11 +2411,14 @@
         "ui": {
           "keys": 0,
           "widthName": 60,
-          "widthComment": 110,
-          "widthDataType": 65,
+          "widthComment": 116,
+          "widthDataType": 71,
           "widthDefault": 60
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_ak_createdAt": {
         "id": "C_ak_createdAt",
@@ -2109,10 +2432,13 @@
           "keys": 0,
           "widthName": 60,
           "widthComment": 60,
-          "widthDataType": 65,
-          "widthDefault": 120
+          "widthDataType": 71,
+          "widthDefault": 133
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "C_ak_updatedAt": {
         "id": "C_ak_updatedAt",
@@ -2124,12 +2450,15 @@
         "options": 8,
         "ui": {
           "keys": 0,
-          "widthName": 60,
-          "widthComment": 68,
-          "widthDataType": 65,
-          "widthDefault": 120
+          "widthName": 61,
+          "widthComment": 70,
+          "widthDataType": 71,
+          "widthDefault": 133
         },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       }
     },
     "relationshipEntities": {
@@ -2138,189 +2467,588 @@
         "identification": false,
         "relationshipType": 16,
         "startRelationshipType": 2,
-        "start": { "tableId": "T_users", "columnIds": ["C_users_userid"], "x": 455, "y": 106, "direction": 2 },
-        "end": { "tableId": "T_rooms", "columnIds": ["C_rooms_hostUserId"], "x": 550, "y": 162, "direction": 1 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 682,
+          "y": 218,
+          "direction": 2
+        },
+        "end": {
+          "tableId": "T_rooms",
+          "columnIds": [
+            "C_rooms_hostUserId"
+          ],
+          "x": 830,
+          "y": 322,
+          "direction": 8
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R02": {
         "id": "R02",
         "identification": false,
         "relationshipType": 16,
         "startRelationshipType": 2,
-        "start": { "tableId": "T_rooms", "columnIds": ["C_rooms_roomId"], "x": 660, "y": 274, "direction": 8 },
-        "end": { "tableId": "T_room_members", "columnIds": ["C_rm_roomId"], "x": 460, "y": 626, "direction": 2 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_rooms",
+          "columnIds": [
+            "C_rooms_roomId"
+          ],
+          "x": 643.3333333333334,
+          "y": 322,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_room_members",
+          "columnIds": [
+            "C_rm_roomId"
+          ],
+          "x": 551,
+          "y": 638,
+          "direction": 2
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R03": {
         "id": "R03",
         "identification": false,
         "relationshipType": 16,
         "startRelationshipType": 2,
-        "start": { "tableId": "T_users", "columnIds": ["C_users_userid"], "x": 252.5, "y": 274, "direction": 8 },
-        "end": { "tableId": "T_room_members", "columnIds": ["C_rm_userId"], "x": 255, "y": 550, "direction": 4 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 247.5,
+          "y": 610,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_room_members",
+          "columnIds": [
+            "C_rm_userId"
+          ],
+          "x": 300.5,
+          "y": 550,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R04": {
         "id": "R04",
         "identification": false,
         "relationshipType": 16,
         "startRelationshipType": 2,
-        "start": { "tableId": "T_rooms", "columnIds": ["C_rooms_roomId"], "x": 990, "y": 162, "direction": 2 },
-        "end": { "tableId": "T_tournaments", "columnIds": ["C_tour_roomId"], "x": 1100, "y": 138, "direction": 1 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_rooms",
+          "columnIds": [
+            "C_rooms_roomId"
+          ],
+          "x": 1110,
+          "y": 186,
+          "direction": 2
+        },
+        "end": {
+          "tableId": "T_tournaments",
+          "columnIds": [
+            "C_tour_roomId"
+          ],
+          "x": 1100,
+          "y": 162,
+          "direction": 1
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R05": {
         "id": "R05",
         "identification": false,
         "relationshipType": 4,
         "startRelationshipType": 1,
-        "start": { "tableId": "T_users", "columnIds": ["C_users_userid"], "x": 455, "y": 68.67, "direction": 2 },
-        "end": { "tableId": "T_tournaments", "columnIds": ["C_tour_winnerId"], "x": 1100, "y": 79.33, "direction": 1 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 682,
+          "y": 106,
+          "direction": 2
+        },
+        "end": {
+          "tableId": "T_tournaments",
+          "columnIds": [
+            "C_tour_winnerId"
+          ],
+          "x": 1100,
+          "y": 87.33333333333334,
+          "direction": 1
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R06": {
         "id": "R06",
         "identification": false,
         "relationshipType": 16,
         "startRelationshipType": 2,
-        "start": { "tableId": "T_tournaments", "columnIds": ["C_tour_tournamentId"], "x": 1299.5, "y": 226, "direction": 8 },
-        "end": { "tableId": "T_tournament_participants", "columnIds": ["C_tp_tournamentId"], "x": 1337.5, "y": 550, "direction": 4 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_tournaments",
+          "columnIds": [
+            "C_tour_tournamentId"
+          ],
+          "x": 1346,
+          "y": 274,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_tournament_participants",
+          "columnIds": [
+            "C_tp_tournamentId"
+          ],
+          "x": 1403.5,
+          "y": 550,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R07": {
         "id": "R07",
         "identification": false,
         "relationshipType": 16,
         "startRelationshipType": 2,
-        "start": { "tableId": "T_users", "columnIds": ["C_users_userid"], "x": 455, "y": 255.33, "direction": 2 },
-        "end": { "tableId": "T_tournament_participants", "columnIds": ["C_tp_userId"], "x": 1100, "y": 626, "direction": 1 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 682,
+          "y": 442,
+          "direction": 2
+        },
+        "end": {
+          "tableId": "T_tournament_participants",
+          "columnIds": [
+            "C_tp_userId"
+          ],
+          "x": 1100,
+          "y": 638,
+          "direction": 1
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R08": {
         "id": "R08",
         "identification": false,
         "relationshipType": 16,
         "startRelationshipType": 1,
-        "start": { "tableId": "T_tournaments", "columnIds": ["C_tour_tournamentId"], "x": 1100, "y": 196.67, "direction": 1 },
-        "end": { "tableId": "T_matchs", "columnIds": ["C_match_tournamentId"], "x": 981.75, "y": 550, "direction": 4 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_tournaments",
+          "columnIds": [
+            "C_tour_tournamentId"
+          ],
+          "x": 1100,
+          "y": 236.66666666666669,
+          "direction": 1
+        },
+        "end": {
+          "tableId": "T_matchs",
+          "columnIds": [
+            "C_match_tournamentId"
+          ],
+          "x": 985,
+          "y": 550,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R09": {
         "id": "R09",
         "identification": false,
         "relationshipType": 16,
         "startRelationshipType": 2,
-        "start": { "tableId": "T_rooms", "columnIds": ["C_rooms_roomId"], "x": 880, "y": 274, "direction": 8 },
-        "end": { "tableId": "T_matchs", "columnIds": ["C_match_roomId"], "x": 824.75, "y": 550, "direction": 4 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_rooms",
+          "columnIds": [
+            "C_rooms_roomId"
+          ],
+          "x": 1016.6666666666666,
+          "y": 322,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_matchs",
+          "columnIds": [
+            "C_match_roomId"
+          ],
+          "x": 637,
+          "y": 550,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R10": {
         "id": "R10",
         "identification": false,
         "relationshipType": 4,
         "startRelationshipType": 1,
-        "start": { "tableId": "T_users", "columnIds": ["C_users_userid"], "x": 455, "y": 143.33, "direction": 2 },
-        "end": { "tableId": "T_matchs", "columnIds": ["C_match_player1Id"], "x": 589.25, "y": 550, "direction": 4 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 484.5,
+          "y": 610,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_matchs",
+          "columnIds": [
+            "C_match_player1Id"
+          ],
+          "x": 550,
+          "y": 607.3333333333334,
+          "direction": 1
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R11": {
         "id": "R11",
         "identification": false,
         "relationshipType": 4,
         "startRelationshipType": 1,
-        "start": { "tableId": "T_users", "columnIds": ["C_users_userid"], "x": 455, "y": 180.67, "direction": 2 },
-        "end": { "tableId": "T_matchs", "columnIds": ["C_match_player2Id"], "x": 667.75, "y": 550, "direction": 4 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 563.5,
+          "y": 610,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_matchs",
+          "columnIds": [
+            "C_match_player2Id"
+          ],
+          "x": 550,
+          "y": 722,
+          "direction": 1
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R12": {
         "id": "R12",
         "identification": false,
         "relationshipType": 4,
         "startRelationshipType": 1,
-        "start": { "tableId": "T_users", "columnIds": ["C_users_userid"], "x": 455, "y": 218, "direction": 2 },
-        "end": { "tableId": "T_matchs", "columnIds": ["C_match_winnerId"], "x": 746.25, "y": 550, "direction": 4 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 642.5,
+          "y": 610,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_matchs",
+          "columnIds": [
+            "C_match_winnerId"
+          ],
+          "x": 550,
+          "y": 836.6666666666666,
+          "direction": 1
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R13": {
         "id": "R13",
         "identification": false,
         "relationshipType": 4,
         "startRelationshipType": 1,
-        "start": { "tableId": "T_matchs", "columnIds": ["C_match_matchId"], "x": 903.25, "y": 550, "direction": 4 },
-        "end": { "tableId": "T_matchs", "columnIds": ["C_match_nextMatchId"], "x": 1021, "y": 570, "direction": 2 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_matchs",
+          "columnIds": [
+            "C_match_matchId"
+          ],
+          "x": 811,
+          "y": 550,
+          "direction": 4
+        },
+        "end": {
+          "tableId": "T_matchs",
+          "columnIds": [
+            "C_match_nextMatchId"
+          ],
+          "x": 1072,
+          "y": 570,
+          "direction": 2
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R14": {
         "id": "R14",
         "identification": false,
         "relationshipType": 16,
         "startRelationshipType": 2,
-        "start": { "tableId": "T_matchs", "columnIds": ["C_match_matchId"], "x": 785.5, "y": 894, "direction": 8 },
-        "end": { "tableId": "T_scores", "columnIds": ["C_score_matchId"], "x": 747, "y": 1050, "direction": 4 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_matchs",
+          "columnIds": [
+            "C_match_matchId"
+          ],
+          "x": 811,
+          "y": 894,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_scores",
+          "columnIds": [
+            "C_score_matchId"
+          ],
+          "x": 824.0775,
+          "y": 1055.6338,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R15": {
         "id": "R15",
         "identification": false,
         "relationshipType": 16,
         "startRelationshipType": 2,
-        "start": { "tableId": "T_users", "columnIds": ["C_users_userid"], "x": 50, "y": 274, "direction": 8 },
-        "end": { "tableId": "T_friends", "columnIds": ["C_friends_requesterId"], "x": 50, "y": 1050, "direction": 4 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 326.5,
+          "y": 610,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_friends",
+          "columnIds": [
+            "C_friends_requesterId"
+          ],
+          "x": 250.2218,
+          "y": 1279.5775,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R16": {
         "id": "R16",
         "identification": false,
         "relationshipType": 16,
         "startRelationshipType": 2,
-        "start": { "tableId": "T_users", "columnIds": ["C_users_userid"], "x": 150, "y": 274, "direction": 8 },
-        "end": { "tableId": "T_friends", "columnIds": ["C_friends_addresseeId"], "x": 150, "y": 1050, "direction": 4 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 405.5,
+          "y": 610,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_friends",
+          "columnIds": [
+            "C_friends_addresseeId"
+          ],
+          "x": 526.7218,
+          "y": 1279.5775,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R17": {
         "id": "R17",
         "identification": false,
         "relationshipType": 16,
         "startRelationshipType": 2,
-        "start": { "tableId": "T_users", "columnIds": ["C_users_userid"], "x": 50, "y": 480, "direction": 8 },
-        "end": { "tableId": "T_messages", "columnIds": ["C_msg_senderId"], "x": 50, "y": 1550, "direction": 4 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 89.5,
+          "y": 610,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_messages",
+          "columnIds": [
+            "C_msg_senderId"
+          ],
+          "x": 169,
+          "y": 1550,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R18": {
         "id": "R18",
         "identification": false,
         "relationshipType": 16,
         "startRelationshipType": 2,
-        "start": { "tableId": "T_users", "columnIds": ["C_users_userid"], "x": 150, "y": 480, "direction": 8 },
-        "end": { "tableId": "T_messages", "columnIds": ["C_msg_receiverId"], "x": 150, "y": 1550, "direction": 4 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 168.5,
+          "y": 610,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_messages",
+          "columnIds": [
+            "C_msg_receiverId"
+          ],
+          "x": 407,
+          "y": 1550,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R19": {
         "id": "R19",
         "identification": false,
         "relationshipType": 16,
         "startRelationshipType": 2,
-        "start": { "tableId": "T_users", "columnIds": ["C_users_userid"], "x": 455, "y": 350, "direction": 2 },
-        "end": { "tableId": "T_user_achievements", "columnIds": ["C_ua_userId"], "x": 1650, "y": 626, "direction": 1 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 682,
+          "y": 330,
+          "direction": 2
+        },
+        "end": {
+          "tableId": "T_user_achievements",
+          "columnIds": [
+            "C_ua_userId"
+          ],
+          "x": 1650,
+          "y": 626,
+          "direction": 1
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R20": {
         "id": "R20",
         "identification": false,
         "relationshipType": 16,
         "startRelationshipType": 2,
-        "start": { "tableId": "T_achievements", "columnIds": ["C_achv_achievementId"], "x": 1850, "y": 350, "direction": 8 },
-        "end": { "tableId": "T_user_achievements", "columnIds": ["C_ua_achievementId"], "x": 1850, "y": 550, "direction": 4 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_achievements",
+          "columnIds": [
+            "C_achv_achievementId"
+          ],
+          "x": 1889.5,
+          "y": 274,
+          "direction": 8
+        },
+        "end": {
+          "tableId": "T_user_achievements",
+          "columnIds": [
+            "C_ua_achievementId"
+          ],
+          "x": 1925.5,
+          "y": 550,
+          "direction": 4
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       },
       "R21": {
         "id": "R21",
         "identification": false,
         "relationshipType": 16,
         "startRelationshipType": 2,
-        "start": { "tableId": "T_users", "columnIds": ["C_users_userid"], "x": 455, "y": 400, "direction": 2 },
-        "end": { "tableId": "T_api_keys", "columnIds": ["C_ak_userId"], "x": 1650, "y": 1126, "direction": 1 },
-        "meta": { "updateAt": 0, "createAt": 0 }
+        "start": {
+          "tableId": "T_users",
+          "columnIds": [
+            "C_users_userid"
+          ],
+          "x": 682,
+          "y": 554,
+          "direction": 2
+        },
+        "end": {
+          "tableId": "T_api_keys",
+          "columnIds": [
+            "C_ak_userId"
+          ],
+          "x": 1650,
+          "y": 1198,
+          "direction": 1
+        },
+        "meta": {
+          "updateAt": 0,
+          "createAt": 0
+        }
       }
     },
     "indexEntities": {},
