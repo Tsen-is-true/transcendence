@@ -140,17 +140,18 @@ export class GameGateway
             const durationSec = (Date.now() - new Date(match.startAt).getTime()) / 1000;
             this.metricsService.observeMatchDuration(durationSec);
           }
-          this.metricsService.setActiveMatches(this.pongEngine.getActiveGameCount());
-
           if (!game.isTournament) {
             this.server.emit('room:deleted', { roomId: game.roomId });
           }
         } catch (err: any) {
           this.logger.error(`Normal Game End process failed: ${err.message}`);
         }
-        
+
         // Postpone removal to cache state against concurrency reloads
-        setTimeout(() => this.pongEngine.removeGame(matchId), 10000);
+        setTimeout(() => {
+          this.pongEngine.removeGame(matchId);
+          this.metricsService.setActiveMatches(this.pongEngine.getActiveGameCount());
+        }, 10000);
       },
     });
   }
@@ -379,6 +380,7 @@ export class GameGateway
       this.logger.error(`Surrender processGameEnd failed: ${err.message}`, err.stack);
     }
     this.pongEngine.removeGame(data.matchId);
+    this.metricsService.setActiveMatches(this.pongEngine.getActiveGameCount());
   }
 
   private async startCountdown(matchId: number, match: Match) {
@@ -495,7 +497,10 @@ export class GameGateway
     }
     
     // Postpone removal to cache state against concurrency reloads
-    setTimeout(() => this.pongEngine.removeGame(matchId), 10000);
+    setTimeout(() => {
+      this.pongEngine.removeGame(matchId);
+      this.metricsService.setActiveMatches(this.pongEngine.getActiveGameCount());
+    }, 10000);
   }
 
   getPlayerNum(game: any, userId: number): 1 | 2 | null {
