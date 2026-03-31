@@ -44,24 +44,6 @@ export function Friends() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Redirect if not logged in
-  useEffect(() => {
-    if (!authLoading && !user) {
-      alert('로그인이 필요합니다.');
-      navigate('/login');
-    }
-  }, [user, authLoading, navigate]);
-
-  if (authLoading) {
-    return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white">
-        <p>Loading friends...</p>
-      </div>
-    );
-  }
-
-  if (!user) return null;
-
   // Fetch friends list
   const fetchFriends = async () => {
     try {
@@ -117,6 +99,31 @@ export function Friends() {
       setLoading(false);
     }
   };
+
+  // Redirect if not logged in
+  useEffect(() => {
+    if (!authLoading && !user) {
+      alert('로그인이 필요합니다.');
+      navigate('/login');
+    }
+  }, [user, authLoading, navigate]);
+
+  // Load friends when auth is ready
+  useEffect(() => {
+    if (!authLoading && user) {
+      fetchFriends();
+    }
+  }, [authLoading, user]);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center text-white">
+        <p>Loading friends...</p>
+      </div>
+    );
+  }
+
+  if (!user) return null;
 
   // Search for users
   const handleSearch = async () => {
@@ -262,11 +269,6 @@ export function Friends() {
       setError(err instanceof Error ? err.message : `Failed to ${action}`);
     }
   };
-
-  // Load friends on mount
-  useEffect(() => {
-    fetchFriends();
-  }, []);
 
   // Handle search on Enter key
   const handleSearchKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
